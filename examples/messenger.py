@@ -76,6 +76,7 @@ def messenger_post():
                 fb_id = message['sender']['id']
                 # We retrieve the message content
                 text = message['message']['text']
+                print(text, "TEXT")
                 # Let's forward the message to Wit /message
                 # and customize our response to the message in handle_message
                 response = client.message(msg=text, context={'session_id':fb_id})
