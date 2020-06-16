@@ -1,0 +1,288 @@
+{
+    "utterances": [
+        {
+            "text": "hi",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$greetings",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "hello!",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$greetings",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tell me a joke about tech",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 21,
+                    "end": 25,
+                    "body": "tech",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "i want to hear a joke about chuck",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 28,
+                    "end": 33,
+                    "body": "chuck",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tell me a joke about technology",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 21,
+                    "end": 31,
+                    "body": "technology",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "let's hear a joke about chuck norris",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 24,
+                    "end": 36,
+                    "body": "chuck norris",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tell me a joke about chuck!",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 21,
+                    "end": 26,
+                    "body": "chuck",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "haha",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "thats funny",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$sentiment",
+                    "value": "positive"
+                }
+            ]
+        },
+        {
+            "text": "that's horrible",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "lol",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "so funny",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "what no",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "tell me a joke",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tell me a joke about Chuck",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 21,
+                    "end": 26,
+                    "body": "Chuck",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tell me something funny",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "HAHA",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$sentiment",
+                    "value": "positive"
+                }
+            ]
+        },
+        {
+            "text": "hilarious",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "tell me a joke about chuck?",
+            "entities": [
+                {
+                    "entity": "category:category",
+                    "start": 21,
+                    "end": 26,
+                    "body": "chuck",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "getJoke",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "this sucks",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "you suck",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "you're horrible",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "you're bad",
+            "entities": [],
+            "traits": []
+        },
+        {
+            "text": "bad",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$sentiment",
+                    "value": "negative"
+                }
+            ]
+        },
+        {
+            "text": "bad joke",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$sentiment",
+                    "value": "negative"
+                }
+            ]
+        },
+        {
+            "text": "Hello",
+            "entities": [],
+            "traits": [
+                {
+                    "trait": "wit$greetings",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "text": "tomorrow at 10",
+            "entities": [
+                {
+                    "entity": "wit$datetime:datetime",
+                    "start": 0,
+                    "end": 14,
+                    "body": "tomorrow at 10",
+                    "entities": []
+                }
+            ],
+            "traits": [
+                {
+                    "trait": "wit$sentiment",
+                    "value": "neutral"
+                }
+            ]
+        }
+    ]
+}

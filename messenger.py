@@ -139,5 +139,6 @@ client = Wit(access_token=WIT_TOKEN)
 
 if __name__ == '__main__':
     # Run Server
-    app.run()
+    # app.run()
     # app.run(host='0.0.0.0', port=argv[1])
+    app.run(host='0.0.0.0', port=8080)

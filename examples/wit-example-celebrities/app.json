@@ -1,0 +1,7 @@
+{
+    "version": 20200513,
+    "zip-command": "zip wit-example-celebrities.zip wit-example-celebrities\/app.json wit-example-celebrities\/entities\/*.json wit-example-celebrities\/intents\/*.json wit-example-celebrities\/traits\/*.json wit-example-celebrities\/utterances\/*.json",
+    "name": "wit-example-celebrities",
+    "lang": "en",
+    "timezone": "America\/Los_Angeles"
+}
