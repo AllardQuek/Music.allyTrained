@@ -1,0 +1,7 @@
+{
+    "version": 20200513,
+    "zip-command": "zip wit-example-joke-bot.zip wit-example-joke-bot\/app.json wit-example-joke-bot\/entities\/*.json wit-example-joke-bot\/intents\/*.json wit-example-joke-bot\/traits\/*.json wit-example-joke-bot\/utterances\/*.json",
+    "name": "wit-example-joke-bot",
+    "lang": "en",
+    "timezone": "America\/Los_Angeles"
+}
