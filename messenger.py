@@ -35,11 +35,15 @@ WIT_TOKEN = os.environ.get('WIT_TOKEN')
 FB_PAGE_TOKEN = os.environ.get('FB_PAGE_TOKEN')
 # A user secret to verify webhook get request.
 FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
+print(FB_PAGE_TOKEN)
 
 # Setup Bottle Server
 debug(True)
 app = Bottle()
 
+@app.get('/')
+def index():
+    return "NOTHING HERE"
 
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
