@@ -81,10 +81,13 @@ def messenger_post():
                 # We retrieve the message content
                 text = message['message']['text']
                 print(text, "TEXT")
+                resp = client.message(text)
+                print(resp)
+                return "REPLY PLEASE"
                 # Let's forward the message to Wit /message
                 # and customize our response to the message in handle_message
-                response = client.message(msg=text, context={'session_id':fb_id})
-                handle_message(response=response, fb_id=fb_id)
+                # response = client.message(msg=text, context={'session_id':fb_id})
+                # handle_message(response=response, fb_id=fb_id)
     else:
         # Returned another event
         return 'Received Different Event'
@@ -139,6 +142,6 @@ client = Wit(access_token=WIT_TOKEN)
 
 if __name__ == '__main__':
     # Run Server
-    app.run()                            
+    app.run()                                   # Need gunicorn !!!        
     # app.run(host='0.0.0.0', port=8080)        WORKS
     # app.run(host='0.0.0.0', port=argv[1])     Procfile how?
