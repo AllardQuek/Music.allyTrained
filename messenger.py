@@ -181,6 +181,7 @@ def handle_message(response, fb_id):
 
     if greetings:
         handle_start(fb_id)
+        return
     elif thanks:
         text = "No problem!"
     elif bye:
@@ -193,19 +194,20 @@ def handle_message(response, fb_id):
         intent = response['intents'][0]['name']
         if intent == 'Greetings':
             handle_start(fb_id)
-        elif intent == 'GetInterval':
+            return
+        elif intent == 'getInterval':
             # TODO: Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
             text = "GETTING INTERVAL..."
-            fb_message(fb_id, text)
+            
         elif intent == 'getChords':
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user.
             text = "GETTING CHORDS..."
-            fb_message(fb_id, text)
-            pass
         else:
             text = "NO INTENT"
 
+    # Send response back to user
+    fb_message(fb_id, text)
 
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
