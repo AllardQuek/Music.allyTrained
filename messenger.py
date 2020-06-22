@@ -171,14 +171,14 @@ def handle_gibberish(response, fb_id):
 
 def handle_message(response, fb_id):
     """
-    Customizes our response to the message and sends it
+    Customizes our first response to the message and sends it
     """
     # Checks if user's message is a greeting
     # Otherwise we will just repeat what they sent us
     greetings = first_trait_value(response['traits'], 'wit$greetings')
     thanks = first_trait_value(response['traits'], 'wit$thanks')
     bye = first_trait_value(response['traits'], 'wit$bye')
-
+    
     if greetings:
         handle_start(fb_id)
     elif thanks:
@@ -204,8 +204,31 @@ def handle_message(response, fb_id):
             fb_message(fb_id, text)
             pass
         else:
-            text = "NO INTENT"
+            text = "Sorry, we couldn't quite understand. Please rephrase your question?"
 
+            
+def handle_intents(response, fb_id):
+    """
+    Scripted replies based on user intent
+    
+    
+    composer=
+    majorKey=
+    minorKey = first_trait_value(response['traits'], 'wit$bye')
+    chords = 
+    """
+    
+    intent = response['intents'][0]['name']
+    entity = response['entities'][0]['name'] """check!!"""
+    role = response['entities'][0]['role']
+    if intent == 'getComposer' and entity == 'Baroque_Composer':
+        text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+    elif intent == 'getComposer' and entity == 'Romantic_Composer':
+        text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+    
+    elif intent == 'getChords' and entity == 'Key_C_major':
+        text = "This is C major, comprised of the notes C E and G."
+    
 
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
