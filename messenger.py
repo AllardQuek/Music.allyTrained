@@ -213,7 +213,7 @@ def handle_message(response, fb_id):
             try:
                 kq_entity = response['entities']["Key_Quality:Key_Quality"]
                 key_quality = kq_entity[0]['value']
-                note = kq_entity["entities"][0]['value']
+                note = kq_entity[0]['entities'][0]['value']
             except KeyError:
                 text = "Sorry! I couldn't identify the chord name :/"
                 fb_message(fb_id, text)
