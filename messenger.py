@@ -247,16 +247,22 @@ def handle_message(response, fb_id):
                 text = f"Sorry! I can't identify a {key_quality} chord :/"    
         elif intent == 'getSongsFromProgression':
             # * Get songs from chord progression
-            # TODO: Extract progression from user
-            prog = response['entities']["Progression:Progression"][0]['body']
-            prog = prog.split(',')
-            progression = ','.join(i for i in prog)
-            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={progression}",
+            try:
+                prog = response['entities']["Progression:Progression"][0]['body']
+            except KeyError:
+                text = "Sorry, I couldn't identify your progression :/ Please try again!"
+                fb_message(fb_id, text)
+                return
+            prog_list = prog.split(',')
+            prog_csv = ','.join(i for i in prog_list)
+            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog_csv}",
                             headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
                             )
             result = res.json()
             text = ""
             count = 1
+            print("PROG_CSV:", prog_csv)
+            print("RESULT:", result)
 
             for song in result:
                 item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
