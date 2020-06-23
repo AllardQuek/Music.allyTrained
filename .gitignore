@@ -1,3 +1,4 @@
 Others/
-.vscode/
 __pycache__/
+.vscode/
+.ipynb_checkpoints/
