@@ -245,22 +245,18 @@ def handle_message(response, fb_id):
                 print("EXCEPTION:", e)
                 text = f"Sorry! I can't identify a {key_quality} chord :/"    
         elif intent == 'getSongsFromProgression':
-            text = """
-                Someone Like You (Chorus) by Adele\nSomeone Like You (Verse) by Adele\nCryin' (Pre-Chorus) by Aerosmith\rCryin' (Verse) by Aerosmith\rSomething Good (Verse) by Alt-J,Boston (Verse) by Augustana,Girlfriend (Chorus) by Avril Lavigne
-                Airplanes (Chorus) by B o B ft Hayley Williams
-                Halo (Verse) by Beyonce
-                Piano Man (Chorus) by Billy Joel
-                She's Always a Woman (Verse) by Billy Joel
-                White Christmas (Verse) by Bing Crosby
-                Just Can't Get Enough (Chorus) by Black Eyed Peas
-                All The Small Things (Verse and Pre-Chorus) by Blink 182
-                Hook (Verse) by Blues Traveler
-                Who says you can't go home (Chorus) by Bon Jovi
-                Grenade (Chorus) by Bruno Mars
-                Just The Way You Are (Chorus) by Bruno Mars
-                Just The Way You Are (Verse) by Bruno Mars
-                The Lazy Song (Chorus) by Bruno Mars
-            """        
+            # * Get songs from chord progression
+            prog = '4,1'
+            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog}",
+                            headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
+                            )
+            result = res.json()
+            text = ""
+            
+            for song in result:
+                item = f"{song['song']} ({song['section']}) by {song['artist']}\n"
+                text += item
+            print(text)
         else:
             text = "NO INTENT"
 
