@@ -253,8 +253,10 @@ def get_songs_from_progression(response, fb_id):
     count = 1
     print("PROG_CSV:", prog_csv)
     print("RESULT:", result)
-    if len(result) > 10:
-        result = result[:10]
+
+    # Limit to 5 songs for readability
+    if len(result) > 5:
+        result = result[:5]
 
     for song in result:
         item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
