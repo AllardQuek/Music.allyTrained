@@ -211,7 +211,9 @@ def handle_message(response, fb_id):
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user
             try:
-                key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
+                kq_entity = response['entities']["Key_Quality:Key_Quality"]
+                key_quality = kq_entity[0]['value']
+                note = kq_entity["entities"][0]['value']
             except KeyError:
                 text = "Sorry! I couldn't identify the chord name :/"
                 fb_message(fb_id, text)
@@ -221,9 +223,9 @@ def handle_message(response, fb_id):
             key_quality = key_quality.capitalize()
 
             if 'maj' in key_quality or 'major' in key_quality:
-                key_quality = key_quality[0] + 'maj' 
+                key_quality = note + 'maj' 
             elif 'min' in key_quality or 'minor' in key_quality:
-                key_quality = key_quality[0] + 'min'
+                key_quality = note + 'min'
             else:
                 pass
 
