@@ -252,10 +252,12 @@ def handle_message(response, fb_id):
                             )
             result = res.json()
             text = ""
-            
+            count = 0
+
             for song in result:
-                item = f"{song['song']} ({song['section']}) by {song['artist']}\n"
+                item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
                 text += item
+                count += 1
             print(text)
         else:
             text = "NO INTENT"
