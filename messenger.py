@@ -113,21 +113,21 @@ def quick_reply(sender_id):
     data = {
           'recipient': {'id': sender_id},
           'message': {
-              'text': "What would you like to do?",
+              'text': "What would you like to get?",
               'quick_replies': [
                 {
                   "content_type":"text",
-                  "title":"Interval",
+                  "title":"Interval from Notes",
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/red.png"
                 },{
                   "content_type":"text",
-                  "title":"Chord",
+                  "title":"Notes from Chord",
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/green.png"
                 },{
                   "content_type":"text",
-                  "title":"Notes from Chord",
+                  "title":"Songs from Chords",
                   "payload":"<POSTBACK_PAYLOAD",
                 }
               ]
@@ -168,7 +168,6 @@ def handle_gibberish(response, fb_id):
     text_1 = "Try asking me about music theory or history!"
     fb_message(fb_id, text)
     fb_message(fb_id, text_1)
-
 
 def get_interval(response, fb_id):
     """
@@ -274,6 +273,7 @@ def handle_message(response, fb_id):
     greetings = first_trait_value(response['traits'], 'wit$greetings')
     thanks = first_trait_value(response['traits'], 'wit$thanks')
     bye = first_trait_value(response['traits'], 'wit$bye')
+    user_msg = response['text']
     
     if greetings:
         handle_start(fb_id)
@@ -282,6 +282,12 @@ def handle_message(response, fb_id):
         text = "No problem!"
     elif bye:
         text = "Goodbye! Have a nice day :)"
+    elif user_msg == "Interval from Notes":
+        text = "You might ask: What is the interval from C to G?"
+    elif user_msg == "Notes from Chord":
+        text = "You might ask: What notes are in a C major chord?"
+    elif user_msg == "Songs from Chords":
+        text = "You might ask: Which songs have 1,4,5 chord progression?"
     else:
         if not response['intents']:
             handle_gibberish(response, fb_id)
