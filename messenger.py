@@ -232,6 +232,35 @@ def get_notes_from_chord(response, fb_id):
 
     return text 
 
+def get_songs_from_progression(response, fb_id):
+    # * Get songs from chord progression
+    try:
+        prog = response['entities']["Progression:Progression"][0]['body']
+    except KeyError:
+        text = "Sorry, I couldn't identify your progression :/ Please try again!"
+        fb_message(fb_id, text)
+        return
+
+    prog_list = prog.split(',')
+    prog_csv = ','.join(i.strip() for i in prog_list)
+    res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog_csv}",
+                    headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
+                    )
+    result = res.json()
+    text = ""
+    count = 1
+    print("PROG_CSV:", prog_csv)
+    print("RESULT:", result)
+    if len(result) > 10:
+        result = result[:10]
+
+    for song in result:
+        item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
+        text += item
+        count += 1
+
+    return text
+
 def handle_message(response, fb_id):
     """
     Customizes our first response to the message and sends it
@@ -262,32 +291,12 @@ def handle_message(response, fb_id):
         elif intent == 'getInterval':
             text = get_interval(response, fb_id)
         elif intent == 'getChords':
-            text = get_notes_from_chord(response, fb_id)
-        elif intent == 'getSongsFromProgression':
-            # * Get songs from chord progression
             try:
-                prog = response['entities']["Progression:Progression"][0]['body']
-            except KeyError:
-                text = "Sorry, I couldn't identify your progression :/ Please try again!"
-                fb_message(fb_id, text)
-                return
-            prog_list = prog.split(',')
-            prog_csv = ','.join(i.strip() for i in prog_list)
-            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog_csv}",
-                            headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
-                            )
-            result = res.json()
-            text = ""
-            count = 1
-            print("PROG_CSV:", prog_csv)
-            print("RESULT:", result)
-            if len(result) > 10:
-                result = result[:10]
-
-            for song in result:
-                item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
-                text += item
-                count += 1
+                text = get_notes_from_chord(response, fb_id)
+            except Exception as e:
+                text = "ERROR"
+        elif intent == 'getSongsFromProgression':
+            text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
             try:
                 if response['entities']['Romantic_Composer:Pyotr_Ilyich_Tchaikovsky'][0]['name'] == 'Romantic_Composer':
