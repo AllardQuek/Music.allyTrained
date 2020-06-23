@@ -196,8 +196,7 @@ def handle_message(response, fb_id):
             handle_start(fb_id)
             return
         elif intent == 'getInterval':
-            # TODO: Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
-            text = "GETTING INTERVAL..."
+            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
             notes = response['entities']["Note:Note"]
             note1 = notes[0]['value']
             note2 = notes[1]['value']
