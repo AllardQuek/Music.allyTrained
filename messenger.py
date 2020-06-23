@@ -30,6 +30,7 @@ from wit import Wit
 from bottle import Bottle, request, debug
 import mingus.core.intervals as intervals
 import mingus.core.chords as chords
+import random
 
 
 # Wit.ai parameters
@@ -261,10 +262,35 @@ def handle_message(response, fb_id):
                 item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
                 text += item
                 count += 1
+<<<<<<< Updated upstream
         elif intent == 'getComposer' and entity == 'Baroque_Composer':
             text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
         elif intent == 'getComposer' and entity == 'Romantic_Composer':
             text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+=======
+        elif intent == 'getComposer':
+            composer = notes = response['entities']["Note:Note"]
+            if response['entities']['Romantic_Composer:Pyotr_Ilyich_Tchaikovsky'][0]['name'] == 'Romantic_Composer':
+                
+                text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+            elif response['entities']['Baroque_Composer:Johann_Sebastian_Bach'][0]['name'] == 'Baroque_Composer':
+                text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+            else:
+                text = "I don't know this composer. Yet ;)"
+
+        elif intent == 'getJokes':
+            joke = random.choice(sequence)
+            sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
+                        "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
+                        "Why didn't Handel go shopping? Because he was Baroque.", 
+                        "How do you fix a broken brass instrument? With a tuba glue.", 
+                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.',
+                        "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
+                        "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
+                        "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
+                        "Why did the pianist keep banging his head against the keys? He was playing by ear."]
+            print(joke)
+>>>>>>> Stashed changes
         else:
             text = "Sorry, we couldn't quite understand. Please rephrase your question?"
 
