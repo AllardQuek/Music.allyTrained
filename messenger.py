@@ -210,7 +210,14 @@ def handle_message(response, fb_id):
         elif intent == 'getChords':
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user.
-            text = "GETTING CHORDS..."
+            key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
+            # TODO: When user requests 7th chord, check if trait "7th" is present
+            try:
+                notes = chords.from_shorthand(key_quality)
+                text = f"The notes in a {key_quality} chord are {notes}."
+            except Exception as e:
+                print("EXCEPTION:", e)
+                text = f"Sorry! I can't identify a {key_quality} chord :/"
         else:
             text = "NO INTENT"
 
