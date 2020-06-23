@@ -179,8 +179,7 @@ def get_interval(response, fb_id):
         print(f"Note 1 is {note1} and Note 2 is {note2}")
     except (KeyError, IndexError) as e:
         text = "Sorry, I don't think you provided enough notes :/"
-        fb_message(fb_id, text)
-        return
+        return text     # Exit early
 
     try:
         interval = intervals.determine(note1, note2)
@@ -200,8 +199,7 @@ def get_notes_from_chord(response, fb_id):
         kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
     except KeyError as e:
         text = "Sorry! I couldn't identify the chord name :/"
-        fb_message(fb_id, text)
-        return
+        return text     # Exit early
 
     key_quality = kq_entity['value']
     key_quality = key_quality.lower()
@@ -209,11 +207,10 @@ def get_notes_from_chord(response, fb_id):
 
     try:
         note = kq_entity['entities'][0]['value']
-    except KeyError as e:
+    except (KeyError, IndexError) as e:
         # If user joins key with quality
         text = "Sorry! I'm not sure what the key is :/"
-        fb_message(fb_id, text)
-        return
+        return text     # Exit early
     
     if 'maj' in key_quality or 'major' in key_quality:
         key_quality = note + 'maj' 
