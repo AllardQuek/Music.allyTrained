@@ -235,8 +235,7 @@ def get_songs_from_progression(response, fb_id):
         prog = response['entities']["Progression:Progression"][0]['body']
     except KeyError:
         text = "Sorry, I couldn't identify your progression :/ Please try again!"
-        fb_message(fb_id, text)
-        return
+        return text     # Exit early
 
     prog_list = prog.split(',')
     prog_csv = ','.join(i.strip() for i in prog_list)
@@ -288,10 +287,7 @@ def handle_message(response, fb_id):
         elif intent == 'getInterval':
             text = get_interval(response, fb_id)
         elif intent == 'getChords':
-            try:
-                text = get_notes_from_chord(response, fb_id)
-            except Exception as e:
-                text = "ERROR"
+            text = get_notes_from_chord(response, fb_id)
         elif intent == 'getSongsFromProgression':
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
