@@ -246,13 +246,7 @@ def handle_message(response, fb_id):
                 text = f"Sorry! I can't identify a {key_quality} chord :/"    
         elif intent == 'getSongsFromProgression':
             text = """
-                Someone Like You (Chorus) by Adele\n
-                Someone Like You (Verse) by Adele\n
-                Cryin' (Pre-Chorus) by Aerosmith\r
-                Cryin' (Verse) by Aerosmith\r
-                Something Good (Verse) by Alt-J
-                Boston (Verse) by Augustana
-                Girlfriend (Chorus) by Avril Lavigne
+                Someone Like You (Chorus) by Adele\nSomeone Like You (Verse) by Adele\nCryin' (Pre-Chorus) by Aerosmith\rCryin' (Verse) by Aerosmith\rSomething Good (Verse) by Alt-J,Boston (Verse) by Augustana,Girlfriend (Chorus) by Avril Lavigne
                 Airplanes (Chorus) by B o B ft Hayley Williams
                 Halo (Verse) by Beyonce
                 Piano Man (Chorus) by Billy Joel
