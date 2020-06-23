@@ -172,16 +172,61 @@ def handle_gibberish(response, fb_id):
 
 def get_interval(response):
     # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
-    notes = response['entities']["Note:Note"]
-    note1 = notes[0]['value']
-    note2 = notes[1]['value']
-    print(f"Note 1 is {note1} and Note 2 is {note2}")
+    try:
+        notes = response['entities']["Note:Note"]
+        note1 = notes[0]['value']
+        note2 = notes[1]['value']
+        print(f"Note 1 is {note1} and Note 2 is {note2}")
+    except (KeyError, IndexError) as e:
+        text = "Sorry, I don't think you provided enough notes :/"
+
     try:
         interval = intervals.determine(note1, note2)
         text = f"The interval between {note1} and {note2} is {interval}."
     except Exception as e:
         print("EXCEPTION", e)
         text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
+
+    return text 
+
+def get_notes_from_chord(response, fb_id):
+    # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
+    # ? When user requests 7th chord, check if trait "7th" is present
+    # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
+    # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
+    try:
+        kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
+    except KeyError as e:
+        text = "Sorry! I couldn't identify the chord name :/"
+        fb_message(fb_id, text)
+        return
+
+    key_quality = kq_entity['value']
+    key_quality = key_quality.lower()
+    key_quality = key_quality.capitalize()
+
+    try:
+        note = kq_entity['entities'][0]['value']
+    except KeyError as e:
+        # If user joins key with quality
+        text = "Sorry! I'm not sure what the key is :/"
+        fb_message(fb_id, text)
+        return
+    
+    if 'maj' in key_quality or 'major' in key_quality:
+        key_quality = note + 'maj' 
+    elif 'min' in key_quality or 'minor' in key_quality:
+        key_quality = note + 'min'
+    else:
+        key_quality = note
+
+    try:
+        notes_list = chords.from_shorthand(key_quality)
+        notes_str = ', '.join(notes_list)
+        text = f"The notes in a {key_quality} chord are {notes_str}."
+    except Exception as e:
+        print("EXCEPTION:", e)
+        text = f"Sorry! I can't identify a {key_quality} chord :/"    
 
     return text 
 
