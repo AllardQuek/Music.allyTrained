@@ -268,7 +268,7 @@ def handle_message(response, fb_id):
             else:
                 text = "I don't know this composer. Yet ;)"
         else:
-            text = "Sorry, we couldn't quite understand. Please rephrase your question?"
+            text = "Sorry, I couldn't quite understand. Please rephrase your question?"
 
     # Send response back to user
     fb_message(fb_id, text)
