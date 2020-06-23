@@ -263,6 +263,8 @@ def handle_message(response, fb_id):
             count = 1
             print("PROG_CSV:", prog_csv)
             print("RESULT:", result)
+            if len(result) > 10:
+                result = result[:10]
 
             for song in result:
                 item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
