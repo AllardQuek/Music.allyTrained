@@ -270,19 +270,7 @@ def handle_message(response, fb_id):
 
     # Send response back to user
     fb_message(fb_id, text)
-
-def handle_intents(response, fb_id):
-    """
-    Scripted replies based on user intent
     
-    
-    composer=
-    majorKey=
-    minorKey = first_trait_value(response['traits'], 'wit$bye')
-    chords = 
-    """
-    elif intent == 'getChords' and entity == 'Key_C_major':
-        text = "This is C major, comprised of the notes C E and G."
         
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
