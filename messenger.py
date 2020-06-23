@@ -211,6 +211,15 @@ def handle_message(response, fb_id):
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user
             key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
+            key_quality.lower()
+            key_quality.capitalize()
+            if 'major' in key_quality:
+                key_quality = key_quality[0] + 'maj'
+            elif 'minor' in key_quality:
+                key_quality = key_quality[0] + 'min'
+            else:
+                pass
+
             # TODO: When user requests 7th chord, check if trait "7th" is present
             # TODO: When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
             try:
