@@ -260,7 +260,7 @@ def handle_message(response, fb_id):
             handle_start(fb_id)
             return
         elif intent == 'getInterval':
-            text = get_interval(response)
+            text = get_interval(response, fb_id)
         elif intent == 'getChords':
             # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
             # ? When user requests 7th chord, check if trait "7th" is present
