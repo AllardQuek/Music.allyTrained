@@ -246,6 +246,7 @@ def handle_message(response, fb_id):
                 text = f"Sorry! I can't identify a {key_quality} chord :/"    
         elif intent == 'getSongsFromProgression':
             # * Get songs from chord progression
+            # TODO: Extract progression from user
             prog = '4,1'
             res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog}",
                             headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
