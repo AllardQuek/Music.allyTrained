@@ -170,7 +170,7 @@ def handle_gibberish(response, fb_id):
     fb_message(fb_id, text_1)
 
 
-def get_interval(response):
+def get_interval(response, fb_id):
     # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
     try:
         notes = response['entities']["Note:Note"]
@@ -179,6 +179,8 @@ def get_interval(response):
         print(f"Note 1 is {note1} and Note 2 is {note2}")
     except (KeyError, IndexError) as e:
         text = "Sorry, I don't think you provided enough notes :/"
+        fb_message(fb_id, text)
+        return
 
     try:
         interval = intervals.determine(note1, note2)
