@@ -171,7 +171,9 @@ def handle_gibberish(response, fb_id):
 
 
 def get_interval(response, fb_id):
-    # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
+    """
+    Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
+    """
     try:
         notes = response['entities']["Note:Note"]
         note1 = notes[0]['value']
@@ -191,10 +193,12 @@ def get_interval(response, fb_id):
     return text 
 
 def get_notes_from_chord(response, fb_id):
+    """
+    Identify the chord user sent. Input to libary function and return chord's notes as response back to user
+    """
     # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
     # ? When user requests 7th chord, check if trait "7th" is present
     # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
-    # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
     try:
         kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
     except KeyError as e:
@@ -230,7 +234,9 @@ def get_notes_from_chord(response, fb_id):
     return text 
 
 def get_songs_from_progression(response, fb_id):
-    # * Get songs from chord progression
+    """
+    Get songs from chord progression (e.g. 1,4,5)
+    """
     try:
         prog = response['entities']["Progression:Progression"][0]['body']
     except KeyError:
