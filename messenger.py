@@ -216,13 +216,13 @@ def handle_message(response, fb_id):
                 text = "Sorry! I couldn't identify the chord name :/"
                 fb_message(fb_id, text)
                 return
-                
+
             key_quality = key_quality.lower()
             key_quality = key_quality.capitalize()
 
-            if 'major' in key_quality:
-                key_quality = key_quality[0] + 'maj'
-            elif 'minor' in key_quality:
+            if 'maj' in key_quality or 'major' in key_quality:
+                key_quality = key_quality[0] + 'maj' 
+            elif 'min' in key_quality or 'minor' in key_quality:
                 key_quality = key_quality[0] + 'min'
             else:
                 pass
