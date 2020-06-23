@@ -28,6 +28,8 @@ import requests
 from sys import argv
 from wit import Wit
 from bottle import Bottle, request, debug
+import mingus.core.intervals as intervals
+import mingus.core.chords as chords
 
 
 # Wit.ai parameters
@@ -56,7 +58,6 @@ def messenger_webhook():
         return challenge
     else:
         return 'Invalid Request or Verification Token'
-
 
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
@@ -91,7 +92,6 @@ def messenger_post():
         # Returned another event
         return 'Received Different Event'
     return None
-
 
 def fb_message(sender_id, text):
     """
@@ -181,6 +181,7 @@ def handle_message(response, fb_id):
     
     if greetings:
         handle_start(fb_id)
+        return
     elif thanks:
         text = "No problem!"
     elif bye:
@@ -191,22 +192,85 @@ def handle_message(response, fb_id):
             return
 
         intent = response['intents'][0]['name']
+        entity = response['entities'][0]['name']
+        
         if intent == 'Greetings':
             handle_start(fb_id)
-        elif intent == 'GetInterval':
-            # TODO: Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
-            text = "GETTING INTERVAL..."
-            fb_message(fb_id, text)
+            return
+        elif intent == 'getInterval':
+            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
+            notes = response['entities']["Note:Note"]
+            note1 = notes[0]['value']
+            note2 = notes[1]['value']
+            print(f"Note 1 is {note1} and Note 2 is {note2}")
+            try:
+                interval = intervals.determine(note1, note2)
+                text = f"The interval between {note1} and {note2} is {interval}."
+            except Exception as e:
+                print("EXCEPTION", e)
+                text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
         elif intent == 'getChords':
-            # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
-            # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user.
-            text = "GETTING CHORDS..."
-            fb_message(fb_id, text)
-            pass
+            # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
+            # ? When user requests 7th chord, check if trait "7th" is present
+            # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
+            # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
+            try:
+                kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
+            except KeyError:
+                text = "Sorry! I couldn't identify the chord name :/"
+                fb_message(fb_id, text)
+                return
+
+            key_quality = kq_entity['value']
+            key_quality = key_quality.lower()
+            key_quality = key_quality.capitalize()
+            note = kq_entity['entities'][0]['value']
+
+            # If user joins key with quality
+            if not note: 
+                text = "Sorry! I'm not sure what the key is :/"
+                fb_message(fb_id, text)
+                return
+            
+            if 'maj' in key_quality or 'major' in key_quality:
+                key_quality = note + 'maj' 
+            elif 'min' in key_quality or 'minor' in key_quality:
+                key_quality = note + 'min'
+            else:
+                key_quality = note
+
+            try:
+                notes_list = chords.from_shorthand(key_quality)
+                notes_str = ', '.join(notes_list)
+                text = f"The notes in a {key_quality} chord are {notes_str}."
+            except Exception as e:
+                print("EXCEPTION:", e)
+                text = f"Sorry! I can't identify a {key_quality} chord :/"    
+        elif intent == 'getSongsFromProgression':
+            # * Get songs from chord progression
+            # TODO: Extract progression from user
+            prog = '4,1'
+            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog}",
+                            headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
+                            )
+            result = res.json()
+            text = ""
+            count = 1
+
+            for song in result:
+                item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
+                text += item
+                count += 1
+        elif intent == 'getComposer' and entity == 'Baroque_Composer':
+            text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+        elif intent == 'getComposer' and entity == 'Romantic_Composer':
+            text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
         else:
             text = "Sorry, we couldn't quite understand. Please rephrase your question?"
 
-            
+    # Send response back to user
+    fb_message(fb_id, text)
+
 def handle_intents(response, fb_id):
     """
     Scripted replies based on user intent
@@ -217,19 +281,9 @@ def handle_intents(response, fb_id):
     minorKey = first_trait_value(response['traits'], 'wit$bye')
     chords = 
     """
-    
-    intent = response['intents'][0]['name']
-    entity = response['entities'][0]['name'] """check!!"""
-    role = response['entities'][0]['role']
-    if intent == 'getComposer' and entity == 'Baroque_Composer':
-        text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
-    elif intent == 'getComposer' and entity == 'Romantic_Composer':
-        text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-    
     elif intent == 'getChords' and entity == 'Key_C_major':
         text = "This is C major, comprised of the notes C E and G."
-    
-
+        
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
 

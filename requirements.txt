@@ -2,3 +2,4 @@ requests
 bottle
 wit
 gunicorn
+mingus
