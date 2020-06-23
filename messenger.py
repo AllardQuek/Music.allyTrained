@@ -28,6 +28,8 @@ import requests
 from sys import argv
 from wit import Wit
 from bottle import Bottle, request, debug
+import mingus.core.intervals as intervals
+import mingus.core.chords as chords
 
 
 # Wit.ai parameters
@@ -56,7 +58,6 @@ def messenger_webhook():
         return challenge
     else:
         return 'Invalid Request or Verification Token'
-
 
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
@@ -91,7 +92,6 @@ def messenger_post():
         # Returned another event
         return 'Received Different Event'
     return None
-
 
 def fb_message(sender_id, text):
     """
@@ -198,7 +198,15 @@ def handle_message(response, fb_id):
         elif intent == 'getInterval':
             # TODO: Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
             text = "GETTING INTERVAL..."
-            
+            notes = response['entities']["Note:Note"]
+            note1 = notes[0]['value']
+            note2 = notes[1]['value']
+            print(f"Note 1 is {note1} and Note 2 is {note2}")
+            try:
+                interval = intervals.determine(note1, note2)
+                text = f"The interval between {note1} and {note2} is {interval}."
+            except:
+                text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
         elif intent == 'getChords':
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user.
@@ -208,6 +216,7 @@ def handle_message(response, fb_id):
 
     # Send response back to user
     fb_message(fb_id, text)
+
 
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
