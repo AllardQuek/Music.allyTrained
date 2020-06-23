@@ -307,7 +307,7 @@ def handle_message(response, fb_id):
             except KeyError:
                 text = "Looks like something went wrong o.o"
         else:
-            text = "Sorry, we couldn't quite understand. Please rephrase your question?"
+            text = "Sorry, I couldn't quite understand. Please rephrase your question?"
 
     # Send response back to user
     fb_message(fb_id, text)
