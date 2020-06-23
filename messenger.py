@@ -210,7 +210,13 @@ def handle_message(response, fb_id):
         elif intent == 'getChords':
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user
             # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user
-            key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
+            try:
+                key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
+            except KeyError:
+                text = "Sorry! I couldn't identify the chord name :/"
+                fb_message(fb_id, text)
+                return
+                
             key_quality = key_quality.lower()
             key_quality = key_quality.capitalize()
 
