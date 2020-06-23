@@ -208,20 +208,28 @@ def handle_message(response, fb_id):
                 print("EXCEPTION", e)
                 text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
         elif intent == 'getChords':
-            # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user
-            # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user
+            # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
+            # ? When user requests 7th chord, check if trait "7th" is present
+            # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
+            # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
             try:
                 kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
-                key_quality = kq_entity['value']
-                note = kq_entity['entities'][0]['value']
             except KeyError:
                 text = "Sorry! I couldn't identify the chord name :/"
                 fb_message(fb_id, text)
                 return
 
+            key_quality = kq_entity['value']
             key_quality = key_quality.lower()
             key_quality = key_quality.capitalize()
+            note = kq_entity['entities'][0]['value']
 
+            # If user joins key with quality
+            if not note: 
+                text = "Sorry! I'm not sure what the key is :/"
+                fb_message(fb_id, text)
+                return
+            
             if 'maj' in key_quality or 'major' in key_quality:
                 key_quality = note + 'maj' 
             elif 'min' in key_quality or 'minor' in key_quality:
@@ -229,15 +237,36 @@ def handle_message(response, fb_id):
             else:
                 key_quality = note
 
-            # TODO: When user requests 7th chord, check if trait "7th" is present
-            # TODO: When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
             try:
                 notes_list = chords.from_shorthand(key_quality)
                 notes_str = ', '.join(notes_list)
                 text = f"The notes in a {key_quality} chord are {notes_str}."
             except Exception as e:
                 print("EXCEPTION:", e)
-                text = f"Sorry! I can't identify a {key_quality} chord :/"
+                text = f"Sorry! I can't identify a {key_quality} chord :/"    
+        elif intent == 'getSongsFromProgression':
+            text = """
+                Someone Like You (Chorus) by Adele
+                Someone Like You (Verse) by Adele
+                Cryin' (Pre-Chorus) by Aerosmith
+                Cryin' (Verse) by Aerosmith
+                Something Good (Verse) by Alt-J
+                Boston (Verse) by Augustana
+                Girlfriend (Chorus) by Avril Lavigne
+                Airplanes (Chorus) by B o B ft Hayley Williams
+                Halo (Verse) by Beyonce
+                Piano Man (Chorus) by Billy Joel
+                She's Always a Woman (Verse) by Billy Joel
+                White Christmas (Verse) by Bing Crosby
+                Just Can't Get Enough (Chorus) by Black Eyed Peas
+                All The Small Things (Verse and Pre-Chorus) by Blink 182
+                Hook (Verse) by Blues Traveler
+                Who says you can't go home (Chorus) by Bon Jovi
+                Grenade (Chorus) by Bruno Mars
+                Just The Way You Are (Chorus) by Bruno Mars
+                Just The Way You Are (Verse) by Bruno Mars
+                The Lazy Song (Chorus) by Bruno Mars
+            """        
         else:
             text = "NO INTENT"
 
