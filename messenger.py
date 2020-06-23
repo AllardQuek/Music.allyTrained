@@ -260,7 +260,7 @@ def handle_message(response, fb_id):
                 item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
                 text += item
                 count += 1
-        elif intent == 'getComposer' and response['entities'][0]['name'] == 'Baroque_Composer':
+        elif intent == 'getComposer' and response['entities']['Romantic_Composer:Richard_Wagner'][0]['name'] == 'Baroque_Composer':
             text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
         elif intent == 'getComposer' and response['entities']['Romantic_Composer:Richard_Wagner'][0]['name'] == 'Romantic_Composer':
             text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
