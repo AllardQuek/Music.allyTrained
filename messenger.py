@@ -32,6 +32,9 @@ import mingus.core.intervals as intervals
 import mingus.core.chords as chords
 import random
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
 
 # Wit.ai parameters
 WIT_TOKEN = os.environ.get('WIT_TOKEN')
@@ -141,6 +144,17 @@ def quick_reply(sender_id):
     resp = requests.post('https://graph.facebook.com/me/messages?' + qs,
                          json=data)
     return resp.content
+
+SPOTIPY_CLIENT_ID=06175aec93d14903bad4abb8ea0f16c7
+SPOTIPY_CLIENT_SECRET=45be25e4ab4a4f7888cd3b18e0d49983
+    def spotify_api(self, parameter_list):
+        
+        sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
+        results = sp.search(q='weezer', limit=20)
+        for idx, track in enumerate(results['tracks']['items']):
+            print(idx, track['name'])
+    
     
 def first_trait_value(traits, trait):
     """
