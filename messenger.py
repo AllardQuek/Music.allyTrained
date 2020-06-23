@@ -262,42 +262,7 @@ def handle_message(response, fb_id):
         elif intent == 'getInterval':
             text = get_interval(response, fb_id)
         elif intent == 'getChords':
-            # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
-            # ? When user requests 7th chord, check if trait "7th" is present
-            # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
-            # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
-            try:
-                kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
-            except KeyError:
-                text = "Sorry! I couldn't identify the chord name :/"
-                fb_message(fb_id, text)
-                return
-
-            key_quality = kq_entity['value']
-            key_quality = key_quality.lower()
-            key_quality = key_quality.capitalize()
-            note = kq_entity['entities'][0]['value']
-
-            # If user joins key with quality
-            if not note: 
-                text = "Sorry! I'm not sure what the key is :/"
-                fb_message(fb_id, text)
-                return
-            
-            if 'maj' in key_quality or 'major' in key_quality:
-                key_quality = note + 'maj' 
-            elif 'min' in key_quality or 'minor' in key_quality:
-                key_quality = note + 'min'
-            else:
-                key_quality = note
-
-            try:
-                notes_list = chords.from_shorthand(key_quality)
-                notes_str = ', '.join(notes_list)
-                text = f"The notes in a {key_quality} chord are {notes_str}."
-            except Exception as e:
-                print("EXCEPTION:", e)
-                text = f"Sorry! I can't identify a {key_quality} chord :/"    
+            text = get_notes_from_chord(response, fb_id)
         elif intent == 'getSongsFromProgression':
             # * Get songs from chord progression
             try:
