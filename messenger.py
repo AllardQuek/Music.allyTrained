@@ -205,7 +205,8 @@ def handle_message(response, fb_id):
             try:
                 interval = intervals.determine(note1, note2)
                 text = f"The interval between {note1} and {note2} is {interval}."
-            except:
+            except Exception as e:
+                print("EXCEPTION", e)
                 text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
         elif intent == 'getChords':
             # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
