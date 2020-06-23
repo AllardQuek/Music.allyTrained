@@ -225,7 +225,7 @@ def get_notes_from_chord(response, fb_id):
         text = f"The notes in a {key_quality} chord are {notes_str}."
     except Exception as e:
         print("EXCEPTION:", e)
-        text = f"Sorry! I can't identify a {key_quality} chord :/"    
+        text = f"Sorry! I can't identify a {kq_entity['body']} chord :/"    
 
     return text 
 
