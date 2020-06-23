@@ -196,7 +196,7 @@ def handle_message(response, fb_id):
             handle_start(fb_id)
             return
         elif intent == 'getInterval':
-            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user.
+            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
             notes = response['entities']["Note:Note"]
             note1 = notes[0]['value']
             note2 = notes[1]['value']
@@ -208,13 +208,15 @@ def handle_message(response, fb_id):
                 print("EXCEPTION", e)
                 text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
         elif intent == 'getChords':
-            # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user.
-            # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user.
+            # TODO: Identify the notes user sent. Input to library function and return identified chord as response back to user
+            # TODO: AND/OR Identify the chord user sent. Input to libary function and return chord's notes as response back to user
             key_quality = response['entities']["Key_Quality:Key_Quality"][0]['value']
             # TODO: When user requests 7th chord, check if trait "7th" is present
+            # TODO: When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
             try:
-                notes = chords.from_shorthand(key_quality)
-                text = f"The notes in a {key_quality} chord are {notes}."
+                notes_list = chords.from_shorthand(key_quality)
+                notes_str = ', '.join(notes_list)
+                text = f"The notes in a {key_quality} chord are {notes_str}."
             except Exception as e:
                 print("EXCEPTION:", e)
                 text = f"Sorry! I can't identify a {key_quality} chord :/"
