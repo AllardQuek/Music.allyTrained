@@ -169,6 +169,22 @@ def handle_gibberish(response, fb_id):
     fb_message(fb_id, text)
     fb_message(fb_id, text_1)
 
+
+def get_interval(response):
+    # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
+    notes = response['entities']["Note:Note"]
+    note1 = notes[0]['value']
+    note2 = notes[1]['value']
+    print(f"Note 1 is {note1} and Note 2 is {note2}")
+    try:
+        interval = intervals.determine(note1, note2)
+        text = f"The interval between {note1} and {note2} is {interval}."
+    except Exception as e:
+        print("EXCEPTION", e)
+        text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
+
+    return text 
+
 def handle_message(response, fb_id):
     """
     Customizes our first response to the message and sends it
@@ -197,17 +213,7 @@ def handle_message(response, fb_id):
             handle_start(fb_id)
             return
         elif intent == 'getInterval':
-            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
-            notes = response['entities']["Note:Note"]
-            note1 = notes[0]['value']
-            note2 = notes[1]['value']
-            print(f"Note 1 is {note1} and Note 2 is {note2}")
-            try:
-                interval = intervals.determine(note1, note2)
-                text = f"The interval between {note1} and {note2} is {interval}."
-            except Exception as e:
-                print("EXCEPTION", e)
-                text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
+            text = get_interval(response)
         elif intent == 'getChords':
             # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
             # ? When user requests 7th chord, check if trait "7th" is present
