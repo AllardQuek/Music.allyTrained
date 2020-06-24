@@ -399,7 +399,7 @@ def handle_message(response, fb_id):
                 results = sp.search(q=composer_name, limit=5)
                 for idx, track in enumerate(results['tracks']['items']):
                     print(idx, track['name'])
-                text = idx, track['name']
+                text = f"{idx}, {track['name']}"
             except Exception as e:
                 print("EXCEPTION:", e)
                 text = "Sorry, we are still working on this feature. Try again next time!"
