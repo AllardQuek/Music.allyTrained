@@ -47,6 +47,12 @@ FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
 debug(True)
 app = Bottle()
 
+#Spotipy parameter
+from spotipy.oauth2 import SpotifyClientCredentials
+cid = '06175aec93d14903bad4abb8ea0f16c7'
+secret = '45be25e4ab4a4f7888cd3b18e0d49983'
+client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
+sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
@@ -306,6 +312,40 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
+        elif intent == 'getRandomSong':
+            artist_name = []
+            track_name = []
+            popularity = []
+            for i in range(0,10,20):
+                track_results = sp.search(q='year:2020', type='track', limit=10) 
+                for i, t in enumerate(track_results['tracks']['items']):
+                    artist_name.append(t['artists'][0]['name'])
+                    track_name.append(t['name'])
+                    popularity.append(t['popularity'])
+                    #the below can combine all the values into one line
+                    #all_results = artist_name + track_name + popularity
+                #print('[%s]' % ', '.join(map(str, artist_name)))
+                #print(artist_name) #Returns list of artists
+                print("Enter a number from 0-9: ")
+                x = int(input())
+                while x >= len(artist_name):
+                    x = int(input("Please enter a number from 0-9: "))
+                
+                # Check if x is within range
+                print(len(artist_name))
+
+                print ("Artist: " + str(artist_name[x]))
+                print("******************************")
+                print("Track: " + str(track_name[x]))
+                print("******************************")
+                print("Popularity: " + str(popularity[x]) + "/100")
+                print('END')
+
+       
 >>>>>>> Stashed changes
         else:
             text = "Sorry, we couldn't quite understand. Please rephrase your question?"
