@@ -70,10 +70,7 @@ def messenger_webhook():
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
 def messenger_post():
-    """
-    Handler for webhook (currently for postback and messages)
-    """
-
+    """Handler for webhook (currently for postback and messages)."""
     data = request.json
 
     if data['object'] == 'page':
@@ -102,9 +99,7 @@ def messenger_post():
     return None
 
 def fb_message(sender_id, text):
-    """
-    Function for returning response to messenger
-    """
+    """Function for returning response to messenger."""
     data = {
         'recipient': {'id': sender_id},
         'message': {'text': text}
@@ -119,7 +114,14 @@ def fb_message(sender_id, text):
 
 def quick_reply(sender_id, text_list):
     """
-    Generate a quick reply with 3 options. Text list must contain 4 items; 1 text message and 3 text options
+    Generate a quick reply with 3 options. 
+    
+    Parameters --
+        :sender_id: Sender's Facebook ID
+        :text_list: A list of 4 strings (1 text message and 3 text options)
+    
+    Returns --
+        :resp.content: Text message sent to the user
     """
     data = {
           'recipient': {'id': sender_id},
@@ -153,9 +155,7 @@ def quick_reply(sender_id, text_list):
     return resp.content
     
 def first_trait_value(traits, trait):
-    """
-    Returns first trait value
-    """
+    """Returns first trait value."""
     if trait not in traits:
         return None
     val = traits[trait][0]['value']
@@ -164,9 +164,7 @@ def first_trait_value(traits, trait):
     return val
 
 def handle_start(fb_id):
-    """
-    Handle starting interaction
-    """
+    """Handle starting interaction."""
     res = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?fields=id%2Cname&access_token=EAAEcGDMoZAxMBAIVxwA7ODhUGGQjjJcZAbQcivRbZCfZB0qsS92nqoCrvTWlj8wzC2gGMiNGi9XJCFpc8XsMhlXPuzbxz1OiWZBuZBxhfvF94vU0OtMR588hXUTdTETyPZA2ujjnPeucaQOVOp0nVSZA2yeK9uZAF2EqcIa4OzM65gwZDZD")
     name = res.json()['name']
     first_name = name.split(' ')[0]
@@ -176,19 +174,16 @@ def handle_start(fb_id):
     quick_reply(fb_id, text_list)
     
 def handle_gibberish(response, fb_id):
-    """
-    Handle whatever random gibberish user sends
-    """
+    """Handle any random gibberish user sends."""
     text = f"Sorry! We did not quite understand \"{response['text']}\" :("
     text_1 = "Try asking me about music theory or history!"
     fb_message(fb_id, text)
     fb_message(fb_id, text_1)
 
 def get_interval(response, fb_id):
-    """
-    Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
-    """
+    """Determnine the interval between 2 notes."""
     try:
+        # Extract the 2 notes user sent
         notes = response['entities']["Note:Note"]
         note1 = notes[0]['value']
         note2 = notes[1]['value']
@@ -197,6 +192,7 @@ def get_interval(response, fb_id):
         return text     # Exit early
 
     try:
+        # Determine interval between notes
         interval = intervals.determine(note1, note2)
         text = f"The interval between {note1} and {note2} is {interval}."
     except Exception as e:
@@ -206,29 +202,31 @@ def get_interval(response, fb_id):
     return text 
 
 def get_notes_from_chord(response, fb_id):
-    """
-    Identify the chord user sent. Input to libary function and return chord's notes as response back to user
-    """
-    # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
+    """Determine notes in a chord given the chord's name."""
+    # ? AND/OR: Extract the notes user sent. Input to library function and return identified chord as response back to user
     # ? When user requests 7th chord, check if trait "7th" is present
     # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
     try:
+        # Extract Key-Quality (e.g. F major)
         kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
     except KeyError as e:
         text = "Sorry! I couldn't identify the chord name :/"
         return text     # Exit early
 
+    # Handle the various valid forms of key quality (e.g. f maj)
     key_quality = kq_entity['value']
     key_quality = key_quality.lower()
     key_quality = key_quality.capitalize()
 
     try:
+        # Extract the key of the chord
         note = kq_entity['entities'][0]['value']
     except (KeyError, IndexError) as e:
         # Could arise when user joins key with quality (e.g. Fmajor)
         text = "Sorry! I'm not sure what the key is :/"
         return text     # Exit early
     
+    # Format user input to requirement of from_shorthand() method
     if 'maj' in key_quality or 'major' in key_quality:
         key_quality = note + 'maj' 
     elif 'min' in key_quality or 'minor' in key_quality:
@@ -237,6 +235,7 @@ def get_notes_from_chord(response, fb_id):
         key_quality = note
 
     try:
+        # Determine the notes in requested chord
         notes_list = chords.from_shorthand(key_quality)
         notes_str = ', '.join(notes_list)
         text = f"The notes in a {key_quality} chord are {notes_str}."
@@ -247,17 +246,19 @@ def get_notes_from_chord(response, fb_id):
     return text 
 
 def get_songs_from_progression(response, fb_id):
-    """
-    Get songs from chord progression (e.g. 1,4,5)
-    """
+    """Return songs using given chord progression (e.g. 1,4,5)."""
     try:
+        # Extract chord progression from user input 
         prog = response['entities']["Progression:Progression"][0]['body']
     except KeyError:
         text = "Sorry, I couldn't identify your progression :/ Please try again!"
         return text     # Exit early
 
+    # Handle case where user types a space between commas
     prog_list = prog.split(',')
     prog_csv = ','.join(i.strip() for i in prog_list)
+
+    # Make GET request to Hooktheory API to obtain songs with requested chord progression
     res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog_csv}",
                     headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
                     )
@@ -265,7 +266,7 @@ def get_songs_from_progression(response, fb_id):
     text = ""
     count = 1
 
-    # Limit to 5 songs for readability
+    # Limit to first 5 songs for readability
     if len(result) > 5:
         result = result[:5]
 
@@ -274,14 +275,18 @@ def get_songs_from_progression(response, fb_id):
         artist = song['artist']
         section = song['section']
 
+        # Make GET request to Spotify API to obtain the song's Spotify URL
         query = f"{title} {artist}"
         q_result = sp.search(q=query, type="track", limit=1)
         q_items = q_result['tracks']['items']
+
         if len(q_items) == 0:
+            # If no Spotify URL is found, return error message instead
             song_url = "Sorry, this song is not on Spotify :/"
         else:
             song_url = q_items[0]['external_urls']['spotify']
 
+        # Format text response so it appears neatly on Messenger
         item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
         text += item
         count += 1
@@ -289,11 +294,7 @@ def get_songs_from_progression(response, fb_id):
     return text
 
 def handle_message(response, fb_id):
-    """
-    Customizes our first response to the message and sends it
-    """
-    # Checks if user's message is a greeting
-    # Otherwise we will just repeat what they sent us
+    """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
     thanks = first_trait_value(response['traits'], 'wit$thanks')
     bye = first_trait_value(response['traits'], 'wit$bye')
@@ -304,6 +305,7 @@ def handle_message(response, fb_id):
         handle_start(fb_id)
         return
     elif user_msg == "Interval":
+        # If user chose one of the inital quick replies, provide more info and allow another quick reply
         text = "I could tell you the interval between 2 notes :)"
         text_list = ["You might ask:", "C to G", "D to Ab", "Eb to F#"]
         allow_quick_reply = True
@@ -320,6 +322,7 @@ def handle_message(response, fb_id):
     elif bye:
         text = "Goodbye! Have a nice day :)"
     else:
+        # Handle all other messages
         if not response['intents']:
             handle_gibberish(response, fb_id)
             return
@@ -374,7 +377,7 @@ def handle_message(response, fb_id):
             elif 'Instruments:String' in response['entities']:        
                 text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
         elif intent == 'getRandomSong':
-            #the below code works, lists top 20 tracks of 2020
+            # List top 20 tracks of 2020
             artist_name = []
             track_name = []
             popularity = []
@@ -411,6 +414,8 @@ def handle_message(response, fb_id):
 
     # Send response back to user
     fb_message(fb_id, text)
+
+    # This would be True if user had chosen one of the inital quick replies when getting started
     if allow_quick_reply:
         quick_reply(fb_id, text_list)
         
