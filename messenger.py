@@ -110,6 +110,9 @@ def fb_message(sender_id, text):
     return resp.content
 
 def quick_reply(sender_id, text_list):
+    """
+    Generate a quick reply with 3 options. Text list must contain 4 items; 1 text message and 3 text options
+    """
     data = {
           'recipient': {'id': sender_id},
           'message': {
@@ -156,6 +159,8 @@ def handle_start(fb_id):
     """
     Handle starting interaction
     """
+    resp = requests.get(f'https://graph.facebook.com/v7.0/{fb_id}')
+    print("HERE IS THE RESPONSE", resp.json())
     text = "Greetings! You can ask me about music theory or history, I would be happy to help!"
     text_list = ["What would you like to get?", "Interval", "Notes", "Songs"]
     fb_message(fb_id, text)
