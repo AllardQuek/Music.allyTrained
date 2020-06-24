@@ -351,8 +351,6 @@ def handle_message(response, fb_id):
     fb_message(fb_id, text)
     if allow_quick_reply:
         quick_reply(fb_id, text_list)
-
-        
         
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
