@@ -266,8 +266,6 @@ def get_songs_from_progression(response, fb_id):
     result = res.json()
     text = ""
     count = 1
-    # print("PROG_CSV:", prog_csv)
-    # print("RESULT:", result)
 
     # Limit to 5 songs for readability
     if len(result) > 5:
@@ -280,6 +278,8 @@ def get_songs_from_progression(response, fb_id):
 
         query = f"{title} by {artist}"
         q_result = sp.search(q=query, type="track", limit=1)
+        print(q_result)
+        print("JSON", q_result.json())
         song_url = q_result['tracks']['items'][0]['external_urls']['spotify']
 
         item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
