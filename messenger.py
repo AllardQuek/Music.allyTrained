@@ -359,6 +359,39 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
+        
+        elif intent == 'getSongsbyComposer':
+            #the below code works, lists top 10 tracks of 2020
+            artist_name = []
+            track_name = []
+            popularity = []
+
+            for i in range(0,10,20):
+                track_results = sp.search(q='year:2020', type='track', limit=10) 
+                for i, t in enumerate(track_results['tracks']['items']):
+                    artist_name.append(t['artists'][0]['name'])
+                    track_name.append(t['name'])
+                    popularity.append(t['popularity'])                    
+                print("Enter a number from 0-9: ")
+                x = int(input())
+                while x >= len(artist_name):
+                    x = int(input("Please enter a number from 0-9: "))
+
+                # Check if x is within range
+                print(len(artist_name))
+
+                print ("Artist: " + str(artist_name[x]))
+                print("******************************")
+                print("Track: " + str(track_name[x]))
+                print("******************************")
+                print("Popularity: " + str(popularity[x]) + "/100")
+                print('END')
+        
+        
+        elif intent == 'getRandomSong':
+            results = sp.search(str(input()), limit=20)
+            for idx, track in enumerate(results['tracks']['items']):
+                print(idx, track['name'])
         else:
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
 
