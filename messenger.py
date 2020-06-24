@@ -365,7 +365,7 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
-        elif intent == 'getSongsbyComposer':
+        elif intent == 'getSongsByComposer':
             #the below code works, lists top 10 tracks of 2020
             artist_name = []
             track_name = []
