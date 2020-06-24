@@ -365,13 +365,13 @@ def handle_message(response, fb_id):
             joke = random.choice(sequence)
             text = joke
         elif intent == 'getInstrument':
-            if ['Instruments:Percussion'] in response['entities']:
+            if 'Instruments:Percussion' in response['entities']:
                 text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
-            elif ['Instruments:Brass'] in response['entities']:        
+            elif 'Instruments:Brass' in response['entities']:        
                 text = "This is a brass instrument. Read more here: https://en.wikipedia.org/wiki/Brass_instrument"
-            elif ['Instruments:Wind'] in response['entities']:        
+            elif 'Instruments:Wind' in response['entities']:        
                 text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
-            elif ['Instruments:String'] in response['entities']:        
+            elif 'Instruments:String' in response['entities']:        
                 text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
         elif intent == 'getRandomSong':
             #the below code works, lists top 20 tracks of 2020
