@@ -396,10 +396,10 @@ def handle_message(response, fb_id):
         elif intent == 'getSongsByComposer':
             try:
                 composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']
-                results = sp.search(q=composer_name, limit=20)
-                text = "response"
-                # for idx, track in enumerate(results['tracks']['items']):
-                #     print(idx, track['name'])
+                results = sp.search(q=composer_name, limit=5)
+                for idx, track in enumerate(results['tracks']['items']):
+                    print(idx, track['name'])
+                    text = idx, track['name']
             except Exception as e:
                 print("EXCEPTION:", e)
                 text = "Sorry, we are still working on this feature. Try again next time!"
