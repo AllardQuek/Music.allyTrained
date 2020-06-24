@@ -352,6 +352,41 @@ def get_composer(response, fb_id):
     
     return text
 
+def get_instrument_section(response, fb_id):
+    """Return the section an instrument is from."""
+    if 'Instruments:Percussion' in response['entities']:
+        text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
+    elif 'Instruments:Brass' in response['entities']:        
+        text = "This is a brass instrument. Read more here: https://en.wikipedia.org/wiki/Brass_instrument"
+    elif 'Instruments:Wind' in response['entities']:        
+        text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
+    elif 'Instruments:String' in response['entities']:        
+        text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
+    else:
+        text = "Sorry! I haven't seen this instrument before :o"
+
+    return text
+
+def get_songs_by_composer(response, fb_id):
+    try:
+        if 'Baroque_Composer:Baroque_Composer' in response['entities']:
+            composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']                    
+        elif 'Classical_Composer:Classical_Composer' in response['entities']:
+            composer_name = response['entities']["Classical_Composer:Classical_Composer"][0]['name']  
+        elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
+            composer_name = response['entities']["Romantic_Composer:Romantic_Composer"][0]['name']
+        elif 'Modern_Composer:Modern_Composer' in response['entities']:
+            composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']
+    
+        results = sp.search(composer_name, limit=10)
+    for idx, track in enumerate(results['tracks']['items']):
+        print(idx, track['name'])
+        text = track['name']
+
+    except Exception as e:
+        print("EXCEPTION:", e)
+        text = "Sorry, we are still working on this feature. Try again next time!"
+
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
@@ -402,48 +437,11 @@ def handle_message(response, fb_id):
         elif intent == 'getJokes':         
             text = get_joke(response, fb_id)
         elif intent == 'getInstrument':
-            if 'Instruments:Percussion' in response['entities']:
-                text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
-            elif 'Instruments:Brass' in response['entities']:        
-                text = "This is a brass instrument. Read more here: https://en.wikipedia.org/wiki/Brass_instrument"
-            elif 'Instruments:Wind' in response['entities']:        
-                text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
-            elif 'Instruments:String' in response['entities']:        
-                text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
-            else:
-                text = "ERROR"
+            text = get_instrument_section(response, fb_id)
         elif intent == 'getRandomSong':
             text = get_random_song(response, fb_id)
         elif intent == 'getSongsByComposer':             
-            try:
-                if 'Baroque_Composer:Baroque_Composer' in response['entities']:
-                    composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']                    
-                elif 'Classical_Composer:Classical_Composer' in response['entities']:
-                    composer_name = response['entities']["Classical_Composer:Classical_Composer"][0]['name']  
-                elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
-                    composer_name = response['entities']["Romantic_Composer:Romantic_Composer"][0]['name']
-                elif 'Modern_Composer:Modern_Composer' in response['entities']:
-                    composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']   
-                elif 'Songs_by_Composer:Songs_by_Composer' in response['entities']:
-                    composer_name = response['entities']["Songs_by_Composer:Songs_by_Composer"][0]['value'] 
-                else:
-                    print("ERROR") 
-                    text = "Sorry, we are unable to tell what composer that is, we will improve it soon!"
-                results = sp.search(q=composer_name, limit=5)
-                # for idx, track in enumerate(results['tracks']['items']):
-                all_items = results['tracks']['items']
-                
-                text = results['tracks']['items'][0]['artists'][0]['name']       # Name of the Artist
-                #####TODO
-                # track_results['tracks']['items']'artists'][0]['name']
-                # track_results['tracks']['items']'name']
-                # print(idx, track['name'])       
-                # text = f"{idx}, {track['name']}"
-                #what if we just printed out the whole list of all items?  like that ah yes
-                #we need separate lines with \n right 
-            except Exception as e:
-                print("EXCEPTION:", e)
-                text = "Sorry, we are still working on this feature. Try again next time!"
+            text = 'This functionality is still a work in progress! Check back again soon ;)'
         else:
             # If intent detected but not scripted for yet
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
