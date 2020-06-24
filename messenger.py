@@ -160,8 +160,9 @@ def handle_start(fb_id):
     Handle starting interaction
     """
     res = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?fields=id%2Cname&access_token=EAAEcGDMoZAxMBAIVxwA7ODhUGGQjjJcZAbQcivRbZCfZB0qsS92nqoCrvTWlj8wzC2gGMiNGi9XJCFpc8XsMhlXPuzbxz1OiWZBuZBxhfvF94vU0OtMR588hXUTdTETyPZA2ujjnPeucaQOVOp0nVSZA2yeK9uZAF2EqcIa4OzM65gwZDZD")
-    print("HERE IS THE RESPONSE", res)
-    text = "Greetings! You can ask me about music theory or history, I would be happy to help!"
+    print("HERE IS THE RESPONSE", res.json())
+    name = res.json()['name']
+    text = f"Greetings {name}! You can ask me about music theory or history, I would be happy to help!"
     text_list = ["What would you like to get?", "Interval", "Notes", "Songs"]
     fb_message(fb_id, text)
     quick_reply(fb_id, text_list)
