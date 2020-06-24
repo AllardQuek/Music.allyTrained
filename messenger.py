@@ -327,7 +327,7 @@ def handle_message(response, fb_id):
 
     # Send response back to user
     fb_message(fb_id, text)
-    if quick_reply == True:
+    if quick_reply:
         quick_reply(fb_id, text_list)
 
         
