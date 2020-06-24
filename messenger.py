@@ -359,7 +359,6 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
-        
         elif intent == 'getSongsbyComposer':
             #the below code works, lists top 10 tracks of 2020
             artist_name = []
@@ -386,8 +385,6 @@ def handle_message(response, fb_id):
                 print("******************************")
                 print("Popularity: " + str(popularity[x]) + "/100")
                 print('END')
-        
-        
         elif intent == 'getRandomSong':
             results = sp.search(str(input()), limit=20)
             for idx, track in enumerate(results['tracks']['items']):
