@@ -328,7 +328,7 @@ def get_random_song(response, fb_id):
     text = ""
     text += f"Artist: {artist_name[num]}\n"
     text += f"Track: {track_name[num]}\n"
-    text += f"Popularity: {str(popularity[num])} + /100\n"
+    text += f"Popularity: {str(popularity[num])}/100\n"
     text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']}"
 
     return text
@@ -410,7 +410,6 @@ def handle_message(response, fb_id):
             text = get_random_song(response, fb_id)
         elif intent == 'getSongsByComposer':             
             try:
-                #ERROR: TODO change
                 if 'Baroque_Composer:Baroque_Composer' in response['entities']:
                     composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']                    
                 elif 'Classical_Composer:Classical_Composer' in response['entities']:
@@ -425,9 +424,17 @@ def handle_message(response, fb_id):
                     print("ERROR") 
                     text = "Sorry, we are unable to tell what composer that is, we will improve it soon!"
                 results = sp.search(q=composer_name, limit=5)
-                for idx, track in enumerate(results['tracks']['items']):
-                    print(idx, track['name'])
-                text = f"{idx}, {track['name']}"
+                # for idx, track in enumerate(results['tracks']['items']):
+                all_items = results['tracks']['items']
+                
+                text = all_items
+                #####TODO
+                # track_results['tracks']['items']'artists'][0]['name']
+                # track_results['tracks']['items']'name']
+                # print(idx, track['name'])       
+                # text = f"{idx}, {track['name']}"
+                #what if we just printed out the whole list of all items?  like that ah yes
+                #we need separate lines with \n right 
             except Exception as e:
                 print("EXCEPTION:", e)
                 text = "Sorry, we are still working on this feature. Try again next time!"
