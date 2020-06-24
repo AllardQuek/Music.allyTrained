@@ -340,14 +340,15 @@ def handle_message(response, fb_id):
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
             try:
-                if 'Baroque_Composer:Baroque_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
-                elif 'Classical_Composer:Classical_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
-                elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Romantic era, characterised by prolific use of rubato (i.e. varying music tempo). Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-                elif 'Modern_Composer:Modern_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Modern era, characterised by dissonant (i.e. clashing) chords and sounds. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
+                entities = response['entities']
+                if 'Baroque_Composer:Baroque_Composer' in entities:
+                    text = f"{entities['Baroque_Composer:Baroque_Composer'][0]['value']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+                elif 'Classical_Composer:Classical_Composer' in entities:
+                    text = f"{entities['Classical_Composer:Classical_Composer'][0]['value']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
+                elif 'Romantic_Composer:Romantic_Composer' in entities:
+                    text = f"{entities['Romantic_Composer:Romantic_Composer'][0]['value']} was a composer from the Romantic era, characterised by prolific use of rubato (i.e. varying music tempo). Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+                elif 'Modern_Composer:Modern_Composer' in entities:
+                    text = f"{entities['Modern_Composer:Modern_Composer'][0]['value']} was a composer from the Modern era, characterised by dissonant (i.e. clashing) chords and sounds. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
                 else:
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
