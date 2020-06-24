@@ -274,7 +274,7 @@ def get_songs_from_progression(response, fb_id):
     for song in result:
         title = song['song']
         artist = song['artist']
-        section = song['artist']
+        section = song['section']
 
         query = f"{title} by {artist}"
         q_result = sp.search(q=query, type="track", limit=1)
