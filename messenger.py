@@ -168,7 +168,6 @@ def handle_start(fb_id):
     Handle starting interaction
     """
     res = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?fields=id%2Cname&access_token=EAAEcGDMoZAxMBAIVxwA7ODhUGGQjjJcZAbQcivRbZCfZB0qsS92nqoCrvTWlj8wzC2gGMiNGi9XJCFpc8XsMhlXPuzbxz1OiWZBuZBxhfvF94vU0OtMR588hXUTdTETyPZA2ujjnPeucaQOVOp0nVSZA2yeK9uZAF2EqcIa4OzM65gwZDZD")
-    print("HERE IS THE RESPONSE", res.json())
     name = res.json()['name']
     first_name = name.split(' ')[0]
     text = f"Greetings {first_name}! You can ask me about music theory or history, I would be happy to help!"
@@ -193,7 +192,6 @@ def get_interval(response, fb_id):
         notes = response['entities']["Note:Note"]
         note1 = notes[0]['value']
         note2 = notes[1]['value']
-        print(f"Note 1 is {note1} and Note 2 is {note2}")
     except (KeyError, IndexError) as e:
         text = "Sorry, I don't think you provided enough notes :/"
         return text     # Exit early
@@ -227,7 +225,7 @@ def get_notes_from_chord(response, fb_id):
     try:
         note = kq_entity['entities'][0]['value']
     except (KeyError, IndexError) as e:
-        # If user joins key with quality
+        # Could arise when user joins key with quality (e.g. Fmajor)
         text = "Sorry! I'm not sure what the key is :/"
         return text     # Exit early
     
@@ -277,13 +275,12 @@ def get_songs_from_progression(response, fb_id):
         section = song['section']
 
         query = f"{title} {artist}"
-        print("THIS WAS THE QUERY:", query)
         q_result = sp.search(q=query, type="track", limit=1)
         q_items = q_result['tracks']['items']
         if len(q_items) == 0:
-            song_url = "This song is not on Spotify :/"
+            song_url = "Sorry, this song is not on Spotify :/"
         else:
-            song_url = q_result['tracks']['items'][0]['external_urls']['spotify']
+            song_url = q_items[0]['external_urls']['spotify']
 
         item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
         text += item
