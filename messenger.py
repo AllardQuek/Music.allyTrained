@@ -292,8 +292,7 @@ def handle_message(response, fb_id):
             else:
                 text = "I don't know this composer. Yet ;)"
 
-        elif intent == 'getJokes':
-            joke = random.choice(sequence)
+        elif intent == 'getJokes':         
             sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
                         "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
                         "Why didn't Handel go shopping? Because he was Baroque.", 
@@ -302,8 +301,11 @@ def handle_message(response, fb_id):
                         "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
                         "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
                         "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
-                        "Why did the pianist keep banging his head against the keys? He was playing by ear."]
-            print(joke)
+                        "Why did the pianist keep banging his head against the keys? He was playing by ear.",
+                        "Want to hear a joke about a staccato? Never mind, it's too short.",
+                        "How about a fermata joke? Never mind, it's too long."]
+            joke = random.choice(sequence)
+            text = joke
 >>>>>>> Stashed changes
         else:
             text = "Sorry, we couldn't quite understand. Please rephrase your question?"
