@@ -11,11 +11,16 @@ spotify_secret = '45be25e4ab4a4f7888cd3b18e0d49983'
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=spotify_cid, client_secret=spotify_secret))
 
-results = sp.search(q='bach', limit=10)
+results = sp.search(str(input()), limit=20)
 for idx, track in enumerate(results['tracks']['items']):
-    text = f"{idx}: {track['name']}"
+    text = idx, track['name']
+    print(text)
+
+# results = sp.search(q='bach', limit=10)
+# for idx, track in enumerate(results['tracks']['items']):
+#     text = f"{idx}: {track['name']}"
     
-print(text)
+# print(text)
 
 # def get_songs_by_composer(response, fb_id):
 #     # WIP
