@@ -293,6 +293,24 @@ def get_songs_from_progression(response, fb_id):
 
     return text
 
+def get_joke(respones, fb_id):
+    """Return a random joke from our list."""
+    sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
+                "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
+                "Why didn't Handel go shopping? Because he was Baroque.", 
+                "How do you fix a broken brass instrument? With a tuba glue.", 
+                "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.'",
+                "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
+                "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
+                "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
+                "Why did the pianist keep banging his head against the keys? He was playing by ear.",
+                "Want to hear a joke about a staccato? Never mind, it's too short.",
+                "How about a fermata joke? Never mind, it's too long.",
+                "What kind of music is scary for balloons? Pop music."]
+    joke = random.choice(sequence)
+
+    return joke
+
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
@@ -354,20 +372,7 @@ def handle_message(response, fb_id):
             except KeyError:
                 text = "Sorry, we are still working on this feature. Try again next time!"
         elif intent == 'getJokes':         
-            sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
-                        "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
-                        "Why didn't Handel go shopping? Because he was Baroque.", 
-                        "How do you fix a broken brass instrument? With a tuba glue.", 
-                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.'",
-                        "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
-                        "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
-                        "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
-                        "Why did the pianist keep banging his head against the keys? He was playing by ear.",
-                        "Want to hear a joke about a staccato? Never mind, it's too short.",
-                        "How about a fermata joke? Never mind, it's too long.",
-                        "What kind of music is scary for balloons? Pop music."]
-            joke = random.choice(sequence)
-            text = joke
+            text = get_joke(response, fb_id)
         elif intent == 'getInstrument':
             if 'Instruments:Percussion' in response['entities']:
                 text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
@@ -393,17 +398,24 @@ def handle_message(response, fb_id):
                     popularity.append(t['popularity'])     
 
             num = random.randint(0,19)
-            print ("Artist: " + str(artist_name[num]))
-            print("Track Name: " + str(popularity[num]))
-            print("Popularity: " + str(popularity[num]) + "/100")
-            print('END')
-            text = f"Artist: + {str(artist_name[num])}"
-            text = f"Track: + {str(track_name[num])}"
-            text = f"Popularity: + {str(popularity[num])} + /100"
-        elif intent == 'getSongsByComposer':
+            text = ""
+            text += f"Artist: + {str(artist_name[num])}\n"
+            text += f"Track: + {str(track_name[num])}\n"
+            text += f"Popularity: + {str(popularity[num])} + /100\n"
+        elif intent == 'getSongsByComposer':             
             try:
                 #ERROR: TODO change
-                composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']
+                if 'Baroque_Composer:Baroque_Composer' in response['entities']:
+                    composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']                    
+                elif 'Classical_Composer:Classical_Composer' in response['entities']:
+                    composer_name = response['entities']["Classical_Composer:Classical_Composer"][0]['name']  
+                elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
+                    composer_name = response['entities']["Romantic_Composer:Romantic_Composer"][0]['name']
+                elif 'Modern_Composer:Modern_Composer' in response['entities']:
+                    composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']                
+                else:
+                    print("ERROR") 
+                    text = "Sorry, we are unable to tell what composer that is, we will improve it soon!"
                 results = sp.search(q=composer_name, limit=5)
                 for idx, track in enumerate(results['tracks']['items']):
                     print(idx, track['name'])
