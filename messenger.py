@@ -176,7 +176,7 @@ def handle_start(fb_id):
 def handle_gibberish(response, fb_id):
     """Handle any random gibberish user sends."""
     text = f"Sorry! We did not quite understand \"{response['text']}\" :("
-    text_1 = "Try asking me about music theory or history!"
+    text_1 = "You can ask me about music theory, songs, composers, instruments, or even jokes!"
     fb_message(fb_id, text)
     fb_message(fb_id, text_1)
 
