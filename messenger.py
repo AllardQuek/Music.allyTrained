@@ -159,9 +159,11 @@ def handle_start(fb_id):
     """
     Handle starting interaction
     """
-    resp = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?fields=id%2Cname&access_token=EAAEcGDMoZAxMBABqud56xJRQbF6uS98nwYzLhEb3EXhpZBlVtY6AbglhJxXlmY0O0aK5npw1kUCCnVazYcoRYzvVOJxMHjQLmCkDoHc6dEUtkry6Lb8DmvIFAZBtwifkoSZAZAI7VmVlwUxCIJNixLZCkJIZAyApW1sTGlwQQT6SxjLCv8dBunRF3Tb3cYNYvEZD")
+    resp = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?access_token=EAAEcGDMoZAxMBABqud56xJRQbF6uS98nwYzLhEb3EXhpZBlVtY6AbglhJxXlmY0O0aK5npw1kUCCnVazYcoRYzvVOJxMHjQLmCkDoHc6dEUtkry6Lb8DmvIFAZBtwifkoSZAZAI7VmVlwUxCIJNixLZCkJIZAyApW1sTGlwQQT6SxjLCv8dBunRF3Tb3cYNYvEZD")
     print("HERE IS THE RESPONSE", resp.json())
-    text = "Greetings! You can ask me about music theory or history, I would be happy to help!"
+    name = resp.json()['name']
+    print("NAME", name)
+    text = f"Greetings {name}! You can ask me about music theory or history, I would be happy to help!"
     text_list = ["What would you like to get?", "Interval", "Notes", "Songs"]
     fb_message(fb_id, text)
     quick_reply(fb_id, text_list)
