@@ -336,10 +336,9 @@ def handle_message(response, fb_id):
         elif intent == 'getSongsFromProgression':
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
-            text = "Input a composer here: "
             try:
-                # e.g. f"Greetings {first_name}! Put the variable within the curly brace
-                name = response['entities']['???']          
+                #name = response['entities']['???']    
+                print("HELLO:", response['entities']['Baroque_Composer:Baroque_Composer'][0])
                 if response['entities']['Baroque_Composer:Baroque_Composer'][0]['name'] == 'Baroque_Composer':
                     text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. It is marked by Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
                 elif response['entities']['Classical_Composer:Classical_Composer'][0]['name'] == 'Classical_Composer':
