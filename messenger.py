@@ -376,6 +376,8 @@ def handle_message(response, fb_id):
                 text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
             elif 'Instruments:String' in response['entities']:        
                 text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
+            else:
+                text = "ERROR"
         elif intent == 'getRandomSong':
             # List top 20 tracks of 2020
             artist_name = []
