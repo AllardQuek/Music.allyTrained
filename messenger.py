@@ -278,10 +278,11 @@ def get_songs_from_progression(response, fb_id):
 
         query = f"{title} by {artist}"
         q_result = sp.search(q=query, type="track", limit=1)
-        tst = q_result['tracks']['items']
-        print("LENGTH", len(tst))
-        print("RESULT:", q_result['tracks']['items'][0]['external_urls'])
-        song_url = q_result['tracks']['items'][0]['external_urls']['spotify']
+        q_items = q_result['tracks']['items']
+        if len(q_items) == 0:
+            song_url = "This song is not on Spotify :/"
+        else:
+            song_url = q_result['tracks']['items'][0]['external_urls']['spotify']
 
         item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
         text += item
