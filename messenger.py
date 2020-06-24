@@ -275,7 +275,7 @@ def handle_message(response, fb_id):
     thanks = first_trait_value(response['traits'], 'wit$thanks')
     bye = first_trait_value(response['traits'], 'wit$bye')
     user_msg = response['text']
-    quick_reply = False
+    allow_quick_reply = False
     
     if greetings:
         handle_start(fb_id)
@@ -283,15 +283,15 @@ def handle_message(response, fb_id):
     elif user_msg == "Interval":
         text = "I could tell you the interval between 2 notes :)"
         text_list = ["You might ask:", "C to G", "D to Ab", "Eb to F#"]
-        quick_reply = True
+        allow_quick_reply = True
     elif user_msg == "Notes":
         text = "I could tell you the notes from the name of a chord :)"
         text_list = ["You might ask:", "C major chord", "D# major chord", "Ab minor chord"]
-        quick_reply = True
+        allow_quick_reply = True
     elif user_msg == "Songs":
         text = "I could share with you songs with certain chord progressions :)"
         text_list = ["You might ask:", "1,4,5", "2,3,6", "3,5,2"]
-        quick_reply = True
+        allow_quick_reply = True
     elif thanks:
         text = "No problem!"
     elif bye:
@@ -327,7 +327,7 @@ def handle_message(response, fb_id):
 
     # Send response back to user
     fb_message(fb_id, text)
-    if quick_reply:
+    if allow_quick_reply:
         quick_reply(fb_id, text_list)
 
         
