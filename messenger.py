@@ -365,7 +365,7 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
-        elif intent == 'getSongsByComposer':
+        elif intent == 'getRandomSong':
             #the below code works, lists top 10 tracks of 2020
             artist_name = []
             track_name = []
@@ -376,11 +376,13 @@ def handle_message(response, fb_id):
                 for i, t in enumerate(track_results['tracks']['items']):
                     artist_name.append(t['artists'][0]['name'])
                     track_name.append(t['name'])
-                    popularity.append(t['popularity'])                    
-                print("Enter a number from 0-9: ")
-                x = int(input())
-                while x >= len(artist_name):
-                    x = int(input("Please enter a number from 0-9: "))
+                    popularity.append(t['popularity'])     
+
+                            
+                # print("Enter a number from 0-9: ")
+                # x = int(input())
+                # while x >= len(artist_name):
+                #     x = int(input("Please enter a number from 0-9: "))
 
                 # Check if x is within range
                 print(len(artist_name))
@@ -391,11 +393,13 @@ def handle_message(response, fb_id):
                 print("******************************")
                 print("Popularity: " + str(popularity[x]) + "/100")
                 print('END')
-        elif intent == 'getRandomSong':
+        elif intent == 'getSongsByComposer':
             try:
-                results = sp.search(str(input()), limit=20)
-                for idx, track in enumerate(results['tracks']['items']):
-                    print(idx, track['name'])
+                composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']
+                results = sp.search(q=composer_name, limit=20)
+                text = "response"
+                # for idx, track in enumerate(results['tracks']['items']):
+                #     print(idx, track['name'])
             except Exception as e:
                 print("EXCEPTION:", e)
                 text = "Sorry, we are still working on this feature. Try again next time!"
