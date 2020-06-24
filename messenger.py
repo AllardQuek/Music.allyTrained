@@ -263,7 +263,7 @@ def get_songs_from_progression(response, fb_id):
                     headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
                     )
     result = res.json()
-    text = f"Here you go! These songs contain the {prog_csv} progression :)"
+    text = f"Here you go! These songs contain the {prog_csv} progression :)\n"
     count = 1
 
     # Limit to first 5 songs for readability
