@@ -278,8 +278,7 @@ def get_songs_from_progression(response, fb_id):
 
         query = f"{title} by {artist}"
         q_result = sp.search(q=query, type="track", limit=1)
-        print(q_result)
-        print("JSON", q_result.json())
+        print("RESULT:", q_result['tracks']['items'][0])
         song_url = q_result['tracks']['items'][0]['external_urls']['spotify']
 
         item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
