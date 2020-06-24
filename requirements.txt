@@ -3,3 +3,4 @@ bottle
 wit
 gunicorn
 mingus
+spotipy

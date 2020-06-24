@@ -32,6 +32,7 @@ import mingus.core.intervals as intervals
 import mingus.core.chords as chords
 import random
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 # Wit.ai parameters
 WIT_TOKEN = os.environ.get('WIT_TOKEN')
@@ -39,6 +40,12 @@ WIT_TOKEN = os.environ.get('WIT_TOKEN')
 FB_PAGE_TOKEN = os.environ.get('FB_PAGE_TOKEN')
 # A user secret to verify webhook get request.
 FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
+
+# Setup Spotify Credentials
+spotify_cid = '06175aec93d14903bad4abb8ea0f16c7'
+spotify_secret = '45be25e4ab4a4f7888cd3b18e0d49983'
+
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=spotify_cid, client_secret=spotify_secret))
 
 # Setup Bottle Server
 debug(True)
@@ -267,7 +274,15 @@ def get_songs_from_progression(response, fb_id):
         result = result[:5]
 
     for song in result:
-        item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
+        title = song['song']
+        artist = song['artist']
+        section = song['artist']
+
+        query = f"{title} by {artist}"
+        q_result = sp.search(q=query, type="track", limit=1)
+        song_url = result['tracks']['items'][0]['external_urls']['spotify']
+
+        item = f"{count}. {title} ({section}) by {artist}\n{song_url}\n"
         text += item
         count += 1
 
@@ -330,13 +345,12 @@ def handle_message(response, fb_id):
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
                 text = "Looks like something went wrong o.o"
-
         elif intent == 'getJokes':         
             sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
                         "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
                         "Why didn't Handel go shopping? Because he was Baroque.", 
                         "How do you fix a broken brass instrument? With a tuba glue.", 
-                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.',
+                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.'",
                         "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
                         "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
                         "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
@@ -347,11 +361,11 @@ def handle_message(response, fb_id):
             text = joke
         else:
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
+
     # Send response back to user
     fb_message(fb_id, text)
     if allow_quick_reply:
         quick_reply(fb_id, text_list)
-
         
         
 # Setup Wit Client
