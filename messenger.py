@@ -337,15 +337,14 @@ def handle_message(response, fb_id):
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
             try:
-                # TODO: Edit text response
                 if 'Baroque_Composer:Baroque_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. It is marked by Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+                    text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
                 elif 'Classical_Composer:Classical_Composer' in response['entities']:
                     text = f"{response['text']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
                 elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+                    text = f"{response['text']} was a composer from the Romantic era, characterised by prolific use of rubato (i.e. varying music tempo). Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
                 elif 'Modern_Composer:Modern_Composer' in response['entities']:
-                    text = f"{response['text']} was a composer from the Modern era. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
+                    text = f"{response['text']} was a composer from the Modern era, characterised by dissonant (i.e. clashing) chords and sounds. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
                 else:
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
@@ -361,36 +360,46 @@ def handle_message(response, fb_id):
                         "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
                         "Why did the pianist keep banging his head against the keys? He was playing by ear.",
                         "Want to hear a joke about a staccato? Never mind, it's too short.",
-                        "How about a fermata joke? Never mind, it's too long."]
+                        "How about a fermata joke? Never mind, it's too long.",
+                        "What kind of music is scary for balloons? Pop music."]
             joke = random.choice(sequence)
             text = joke
+
+        elif intent == 'getInstrument':
+            if ['Instruments:Percussion'] in response['entities']:
+                text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
+            elif ['Instruments:Brass'] in response['entities']:        
+                text = "This is a brass instrument. Read more here: https://en.wikipedia.org/wiki/Brass_instrument"
+            elif ['Instruments:Wind'] in response['entities']:        
+                text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
+            elif ['Instruments:String'] in response['entities']:        
+                text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
+        
         elif intent == 'getRandomSong':
-            #the below code works, lists top 10 tracks of 2020
+            #the below code works, lists top 20 tracks of 2020
             artist_name = []
             track_name = []
             popularity = []
 
             for i in range(0,10,20):
-                track_results = sp.search(q='year:2020', type='track', limit=10) 
+                track_results = sp.search(q='year:2020', type='track', limit=20) 
                 for i, t in enumerate(track_results['tracks']['items']):
                     artist_name.append(t['artists'][0]['name'])
                     track_name.append(t['name'])
                     popularity.append(t['popularity'])     
 
-                # TODO: Use random to get num from 0-9
-                # print("Enter a number from 0-9: ")
-                # x = int(input())
-                # while x >= len(artist_name):
-                #     x = int(input("Please enter a number from 0-9: "))
-                num = 0
-                # Check if x is within range
-                print(len(artist_name))
-                print ("Artist: " + str(artist_name[num]))
-                print("Popularity: " + str(popularity[num]) + "/100")
-                print('END')
-                text = f"Track: + {str(track_name[num])}"
+            num = random.randint(0,19)
+            print ("Artist: " + str(artist_name[num]))
+            print("Track Name: " + str(popularity[num]))
+            print("Popularity: " + str(popularity[num]) + "/100")
+            print('END')
+            text = f"Artist: + {str(artist_name[num])}"
+            text = f"Track: + {str(track_name[num])}"
+            text = f"Popularity: + {str(popularity[num])} + /100"
+
         elif intent == 'getSongsByComposer':
             try:
+                #ERROR: TODO change
                 composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']
                 results = sp.search(q=composer_name, limit=5)
                 for idx, track in enumerate(results['tracks']['items']):
