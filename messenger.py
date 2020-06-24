@@ -402,7 +402,7 @@ def handle_message(response, fb_id):
             text += f"Artist: {artist_name[num]}\n"
             text += f"Track: {track_name[num]}\n"
             text += f"Popularity: {str(popularity[num])} + /100\n"
-            text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']"
+            text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']}"
         elif intent == 'getSongsByComposer':             
             try:
                 #ERROR: TODO change
