@@ -364,7 +364,6 @@ def handle_message(response, fb_id):
                         "What kind of music is scary for balloons? Pop music."]
             joke = random.choice(sequence)
             text = joke
-
         elif intent == 'getInstrument':
             if ['Instruments:Percussion'] in response['entities']:
                 text = "This is a percussion instrument. Read more here: https://en.wikipedia.org/wiki/Percussion_instrument"
@@ -374,7 +373,6 @@ def handle_message(response, fb_id):
                 text = "This is a wind instrument. Read more here: https://en.wikipedia.org/wiki/Wind_instrument"
             elif ['Instruments:String'] in response['entities']:        
                 text = "This is a string instrument. Read more here: https://en.wikipedia.org/wiki/String_instrument" 
-        
         elif intent == 'getRandomSong':
             #the below code works, lists top 20 tracks of 2020
             artist_name = []
@@ -396,7 +394,6 @@ def handle_message(response, fb_id):
             text = f"Artist: + {str(artist_name[num])}"
             text = f"Track: + {str(track_name[num])}"
             text = f"Popularity: + {str(popularity[num])} + /100"
-
         elif intent == 'getSongsByComposer':
             try:
                 #ERROR: TODO change
