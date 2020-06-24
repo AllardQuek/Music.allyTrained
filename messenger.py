@@ -336,9 +336,9 @@ def handle_message(response, fb_id):
         elif intent == 'getSongsFromProgression':
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
+            print("HELLO:", response['entities']['Baroque_Composer:Baroque_Composer'][0])
             try:
                 #name = response['entities']['???']    
-                print("HELLO:", response['entities']['Baroque_Composer:Baroque_Composer'][0])
                 if response['entities']['Baroque_Composer:Baroque_Composer'][0]['name'] == 'Baroque_Composer':
                     text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. It is marked by Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
                 elif response['entities']['Classical_Composer:Classical_Composer'][0]['name'] == 'Classical_Composer':
@@ -378,18 +378,18 @@ def handle_message(response, fb_id):
                     track_name.append(t['name'])
                     popularity.append(t['popularity'])     
 
-                            
+                # TODO: Use random to get num from 0-9
                 # print("Enter a number from 0-9: ")
                 # x = int(input())
                 # while x >= len(artist_name):
                 #     x = int(input("Please enter a number from 0-9: "))
-
+                num = 0
                 # Check if x is within range
                 print(len(artist_name))
-                print ("Artist: " + str(artist_name[0]))
-                print("Popularity: " + str(popularity[0]) + "/100")
+                print ("Artist: " + str(artist_name[num]))
+                print("Popularity: " + str(popularity[num]) + "/100")
                 print('END')
-                text = f"Track: + {str(track_name[0])}"
+                text = f"Track: + {str(track_name[num])}"
         elif intent == 'getSongsByComposer':
             try:
                 composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']
