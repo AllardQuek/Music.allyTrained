@@ -344,7 +344,7 @@ def handle_message(response, fb_id):
                 else:
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
-                text = "Looks like something went wrong o.o"
+                text = "Sorry, we are still working on this feature. Try again next time!"
         elif intent == 'getJokes':         
             sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
                         "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
@@ -386,9 +386,13 @@ def handle_message(response, fb_id):
                 print("Popularity: " + str(popularity[x]) + "/100")
                 print('END')
         elif intent == 'getRandomSong':
-            results = sp.search(str(input()), limit=20)
-            for idx, track in enumerate(results['tracks']['items']):
-                print(idx, track['name'])
+            try:
+                results = sp.search(str(input()), limit=20)
+                for idx, track in enumerate(results['tracks']['items']):
+                    print(idx, track['name'])
+            except Exception as e:
+                print("EXCEPTION:", e)
+                text = "Sorry, we are still working on this feature. Try again next time!"
         else:
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
 
