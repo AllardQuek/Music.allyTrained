@@ -337,13 +337,14 @@ def handle_message(response, fb_id):
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
             try:
-                if response['entities']['Baroque_Composer:Baroque_Composer'][0]['name'] == 'Baroque_Composer':
+                # TODO: Edit text response
+                if 'Baroque_Composer:Baroque_Composer' in response['entities']:
                     text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. It is marked by Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
-                elif response['entities']['Classical_Composer:Classical_Composer'][0]['name'] == 'Classical_Composer':
+                elif 'Classical_Composer:Classical_Composer' in response['entities']:
                     text = f"{response['text']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
-                elif response['entities']['Romantic_Composer:Romantic_Composer'][0]['name'] == 'Romantic_Composer':
+                elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
                     text = f"{response['text']} was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-                elif response['entities']['Modern_Composer:Modern_Composer'][0]['name'] == 'Modern_Composer':
+                elif 'Modern_Composer:Modern_Composer' in response['entities']:
                     text = f"{response['text']} was a composer from the Modern era. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
                 else:
                     text = "I don't know this composer. Yet ;)"
