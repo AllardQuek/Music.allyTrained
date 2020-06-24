@@ -333,6 +333,25 @@ def get_random_song(response, fb_id):
 
     return text
 
+def get_composer(response, fb_id):
+    """Return info about the type of composer and provide URL to more info."""
+    try:
+        entities = response['entities']
+        if 'Baroque_Composer:Baroque_Composer' in entities:
+            text = f"{entities['Baroque_Composer:Baroque_Composer'][0]['value']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+        elif 'Classical_Composer:Classical_Composer' in entities:
+            text = f"{entities['Classical_Composer:Classical_Composer'][0]['value']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
+        elif 'Romantic_Composer:Romantic_Composer' in entities:
+            text = f"{entities['Romantic_Composer:Romantic_Composer'][0]['value']} was a composer from the Romantic era, characterised by prolific use of rubato (i.e. varying music tempo). Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+        elif 'Modern_Composer:Modern_Composer' in entities:
+            text = f"{entities['Modern_Composer:Modern_Composer'][0]['value']} was a composer from the Modern era, characterised by dissonant (i.e. clashing) chords and sounds. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
+        else:
+            text = "I don't know this composer. Yet ;)"
+    except KeyError:
+        text = "Sorry, we are still working on this feature. Try again next time!"
+    
+    return text
+
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
@@ -379,20 +398,7 @@ def handle_message(response, fb_id):
         elif intent == 'getSongsFromProgression':
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
-            try:
-                entities = response['entities']
-                if 'Baroque_Composer:Baroque_Composer' in entities:
-                    text = f"{entities['Baroque_Composer:Baroque_Composer'][0]['value']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
-                elif 'Classical_Composer:Classical_Composer' in entities:
-                    text = f"{entities['Classical_Composer:Classical_Composer'][0]['value']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
-                elif 'Romantic_Composer:Romantic_Composer' in entities:
-                    text = f"{entities['Romantic_Composer:Romantic_Composer'][0]['value']} was a composer from the Romantic era, characterised by prolific use of rubato (i.e. varying music tempo). Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-                elif 'Modern_Composer:Modern_Composer' in entities:
-                    text = f"{entities['Modern_Composer:Modern_Composer'][0]['value']} was a composer from the Modern era, characterised by dissonant (i.e. clashing) chords and sounds. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
-                else:
-                    text = "I don't know this composer. Yet ;)"
-            except KeyError:
-                text = "Sorry, we are still working on this feature. Try again next time!"
+            text = get_composer(response,fb_id)
         elif intent == 'getJokes':         
             text = get_joke(response, fb_id)
         elif intent == 'getInstrument':
@@ -427,7 +433,7 @@ def handle_message(response, fb_id):
                 # for idx, track in enumerate(results['tracks']['items']):
                 all_items = results['tracks']['items']
                 
-                text = all_items
+                text = track_results['tracks']['items']'artists'][0]['name']       # Name of the Artist
                 #####TODO
                 # track_results['tracks']['items']'artists'][0]['name']
                 # track_results['tracks']['items']'name']
