@@ -16,3 +16,25 @@ for idx, track in enumerate(results['tracks']['items']):
     text = f"{idx}: {track['name']}"
     
 print(text)
+
+# def get_songs_by_composer(response, fb_id):
+#     # WIP
+#     pass
+
+# try:
+#     if 'Baroque_Composer:Baroque_Composer' in response['entities']:
+#         composer_name = response['entities']["Baroque_Composer:Baroque_Composer"][0]['name']                    
+#     elif 'Classical_Composer:Classical_Composer' in response['entities']:
+#         composer_name = response['entities']["Classical_Composer:Classical_Composer"][0]['name']  
+#     elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
+#         composer_name = response['entities']["Romantic_Composer:Romantic_Composer"][0]['name']
+#     elif 'Modern_Composer:Modern_Composer' in response['entities']:
+#         composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']
+
+#     results = sp.search(composer_name, limit=10)
+#     for idx, track in enumerate(results['tracks']['items']):
+#         print(idx, track['name'])
+#         text = track['name']
+# except Exception as e:
+#     print("EXCEPTION:", e)
+#     text = "Sorry, we are still working on this feature. Try again next time!"
