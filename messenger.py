@@ -30,7 +30,8 @@ from wit import Wit
 from bottle import Bottle, request, debug
 import mingus.core.intervals as intervals
 import mingus.core.chords as chords
-
+import random
+import spotipy
 
 # Wit.ai parameters
 WIT_TOKEN = os.environ.get('WIT_TOKEN')
@@ -329,14 +330,29 @@ def handle_message(response, fb_id):
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
                 text = "Looks like something went wrong o.o"
-        else:
-            text = "Sorry, I couldn't quite understand. Please rephrase your question?"
 
+        elif intent == 'getJokes':         
+            sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
+                        "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
+                        "Why didn't Handel go shopping? Because he was Baroque.", 
+                        "How do you fix a broken brass instrument? With a tuba glue.", 
+                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.',
+                        "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
+                        "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
+                        "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
+                        "Why did the pianist keep banging his head against the keys? He was playing by ear.",
+                        "Want to hear a joke about a staccato? Never mind, it's too short.",
+                        "How about a fermata joke? Never mind, it's too long."]
+            joke = random.choice(sequence)
+            text = joke
+        else:
+            text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
     # Send response back to user
     fb_message(fb_id, text)
     if allow_quick_reply:
         quick_reply(fb_id, text_list)
 
+        
         
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
