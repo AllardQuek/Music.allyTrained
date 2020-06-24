@@ -433,7 +433,7 @@ def handle_message(response, fb_id):
                 # for idx, track in enumerate(results['tracks']['items']):
                 all_items = results['tracks']['items']
                 
-                text = track_results['tracks']['items']'artists'][0]['name']       # Name of the Artist
+                text = results['tracks']['items']['artists'][0]['name']       # Name of the Artist
                 #####TODO
                 # track_results['tracks']['items']'artists'][0]['name']
                 # track_results['tracks']['items']'name']
