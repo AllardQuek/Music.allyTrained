@@ -336,11 +336,18 @@ def handle_message(response, fb_id):
         elif intent == 'getSongsFromProgression':
             text = get_songs_from_progression(response, fb_id)
         elif intent == 'getComposer':
+            text = "Input a composer here: "
             try:
-                if response['entities']['Romantic_Composer:Pyotr_Ilyich_Tchaikovsky'][0]['name'] == 'Romantic_Composer':
-                    text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-                elif response['entities']['Baroque_Composer:Johann_Sebastian_Bach'][0]['name'] == 'Baroque_Composer':
-                    text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+                # e.g. f"Greetings {first_name}! Put the variable within the curly brace
+                name = response['entities']['???']          
+                if response['entities']['Baroque_Composer:Baroque_Composer'][0]['name'] == 'Baroque_Composer':
+                    text = f"{response['text']} was a composer from the Baroque era, marked by ostinato (i.e. persistent, repeating bassline) and has little variations in tempo in 4/4 timing. It is marked by Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+                elif response['entities']['Classical_Composer:Classical_Composer'][0]['name'] == 'Classical_Composer':
+                    text = f"{response['text']} was a composer from the Classical era, marked by homophonic texture (i.e. one melodic line on top of the bass lines) and sometimes has alberti bass. Read more here: https://en.wikipedia.org/wiki/Classical_period_(music) "             
+                elif response['entities']['Romantic_Composer:Romantic_Composer'][0]['name'] == 'Romantic_Composer':
+                    text = f"{response['text']} was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+                elif response['entities']['Modern_Composer:Modern_Composer'][0]['name'] == 'Modern_Composer':
+                    text = f"{response['text']} was a composer from the Modern era. Read more here: https://en.wikipedia.org/wiki/Modernism_(music)"
                 else:
                     text = "I don't know this composer. Yet ;)"
             except KeyError:
@@ -394,6 +401,7 @@ def handle_message(response, fb_id):
                 print("EXCEPTION:", e)
                 text = "Sorry, we are still working on this feature. Try again next time!"
         else:
+            # If intent detected but not scripted for yet
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   
 
     # Send response back to user
