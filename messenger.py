@@ -109,25 +109,25 @@ def fb_message(sender_id, text):
                          json=data)
     return resp.content
 
-def quick_reply(sender_id):
+def quick_reply(sender_id, text_list):
     data = {
           'recipient': {'id': sender_id},
           'message': {
-              'text': "What would you like to get?",
+              'text': text_list[0],
               'quick_replies': [
                 {
                   "content_type":"text",
-                  "title":"Interval from Notes",
+                  "title":text_list[1],
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/red.png"
                 },{
                   "content_type":"text",
-                  "title":"Notes from Chord",
+                  "title":text_list[2],
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/green.png"
                 },{
                   "content_type":"text",
-                  "title":"Songs from Chords",
+                  "title":text_list[3],
                   "payload":"<POSTBACK_PAYLOAD",
                 }
               ]
@@ -157,8 +157,9 @@ def handle_start(fb_id):
     Handle starting interaction
     """
     text = "Greetings! You can ask me about music theory or history, I would be happy to help!"
+    text_list = ["What would you like to get?", "Interval", "Notes", "Songs"]
     fb_message(fb_id, text)
-    quick_reply(fb_id)
+    quick_reply(fb_id, text_list)
     
 def handle_gibberish(response, fb_id):
     """
@@ -282,12 +283,18 @@ def handle_message(response, fb_id):
         text = "No problem!"
     elif bye:
         text = "Goodbye! Have a nice day :)"
-    elif user_msg == "Interval from Notes":
-        text = "You might ask: What is the interval from C to G?"
-    elif user_msg == "Notes from Chord":
-        text = "You might ask: What notes are in a C major chord?"
-    elif user_msg == "Songs from Chords":
-        text = "You might ask: Which songs have 1,4,5 chord progression?"
+    elif user_msg == "Interval":
+        text = "I could tell you the interval between 2 notes :)"
+        text_list = ["You might ask:", "C to G", "D to Ab", "Eb to F#"]
+        quick_reply(fb_id, text_list)
+    elif user_msg == "Notes":
+        text = "I could tell you the notes from the name of a chord :)"
+        text_list = ["You might ask:", "C major chord", "D# major chord", "Ab minor chord"]
+        quick_reply(fb_id, text_list)
+    elif user_msg == "Songs":
+        text = "I could share with you songs with certain chord progressions :)"
+        text_list = ["You might ask:", "1,4,5", "2,3,6", "3,5,2"]
+        quick_reply(fb_id, text_list)
     else:
         if not response['intents']:
             handle_gibberish(response, fb_id)
