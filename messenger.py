@@ -30,6 +30,10 @@ from wit import Wit
 from bottle import Bottle, request, debug
 import mingus.core.intervals as intervals
 import mingus.core.chords as chords
+import random
+
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 # Wit.ai parameters
@@ -109,28 +113,25 @@ def fb_message(sender_id, text):
                          json=data)
     return resp.content
 
-def quick_reply(sender_id, text_list):
-    """
-    Generate a quick reply with 3 options. Text list must contain 4 items; 1 text message and 3 text options
-    """
+def quick_reply(sender_id):
     data = {
           'recipient': {'id': sender_id},
           'message': {
-              'text': text_list[0],
+              'text': "What would you like to do?",
               'quick_replies': [
                 {
                   "content_type":"text",
-                  "title":text_list[1],
+                  "title":"Interval",
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/red.png"
                 },{
                   "content_type":"text",
-                  "title":text_list[2],
+                  "title":"Chord",
                   "payload":"<POSTBACK_PAYLOAD>",
                   # "image_url":"http://example.com/img/green.png"
                 },{
                   "content_type":"text",
-                  "title":text_list[3],
+                  "title":"Notes from Chord",
                   "payload":"<POSTBACK_PAYLOAD",
                 }
               ]
@@ -143,6 +144,17 @@ def quick_reply(sender_id, text_list):
     resp = requests.post('https://graph.facebook.com/me/messages?' + qs,
                          json=data)
     return resp.content
+
+SPOTIPY_CLIENT_ID=06175aec93d14903bad4abb8ea0f16c7
+SPOTIPY_CLIENT_SECRET=45be25e4ab4a4f7888cd3b18e0d49983
+    def spotify_api(self, parameter_list):
+        
+        sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
+        results = sp.search(q='weezer', limit=20)
+        for idx, track in enumerate(results['tracks']['items']):
+            print(idx, track['name'])
+    
     
 def first_trait_value(traits, trait):
     """
@@ -159,14 +171,9 @@ def handle_start(fb_id):
     """
     Handle starting interaction
     """
-    res = requests.get(f"https://graph.facebook.com/v7.0/{fb_id}?fields=id%2Cname&access_token=EAAEcGDMoZAxMBAIVxwA7ODhUGGQjjJcZAbQcivRbZCfZB0qsS92nqoCrvTWlj8wzC2gGMiNGi9XJCFpc8XsMhlXPuzbxz1OiWZBuZBxhfvF94vU0OtMR588hXUTdTETyPZA2ujjnPeucaQOVOp0nVSZA2yeK9uZAF2EqcIa4OzM65gwZDZD")
-    print("HERE IS THE RESPONSE", res.json())
-    name = res.json()['name']
-    first_name = name.split(' ')[0]
-    text = f"Greetings {first_name}! You can ask me about music theory or history, I would be happy to help!"
-    text_list = ["What would you like to get?", "Interval", "Notes", "Songs"]
+    text = "Greetings! You can ask me about music theory or history, I would be happy to help!"
     fb_message(fb_id, text)
-    quick_reply(fb_id, text_list)
+    quick_reply(fb_id)
     
 def handle_gibberish(response, fb_id):
     """
@@ -177,101 +184,6 @@ def handle_gibberish(response, fb_id):
     fb_message(fb_id, text)
     fb_message(fb_id, text_1)
 
-def get_interval(response, fb_id):
-    """
-    Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
-    """
-    try:
-        notes = response['entities']["Note:Note"]
-        note1 = notes[0]['value']
-        note2 = notes[1]['value']
-        print(f"Note 1 is {note1} and Note 2 is {note2}")
-    except (KeyError, IndexError) as e:
-        text = "Sorry, I don't think you provided enough notes :/"
-        return text     # Exit early
-
-    try:
-        interval = intervals.determine(note1, note2)
-        text = f"The interval between {note1} and {note2} is {interval}."
-    except Exception as e:
-        print("EXCEPTION", e)
-        text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
-
-    return text 
-
-def get_notes_from_chord(response, fb_id):
-    """
-    Identify the chord user sent. Input to libary function and return chord's notes as response back to user
-    """
-    # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
-    # ? When user requests 7th chord, check if trait "7th" is present
-    # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
-    try:
-        kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
-    except KeyError as e:
-        text = "Sorry! I couldn't identify the chord name :/"
-        return text     # Exit early
-
-    key_quality = kq_entity['value']
-    key_quality = key_quality.lower()
-    key_quality = key_quality.capitalize()
-
-    try:
-        note = kq_entity['entities'][0]['value']
-    except (KeyError, IndexError) as e:
-        # If user joins key with quality
-        text = "Sorry! I'm not sure what the key is :/"
-        return text     # Exit early
-    
-    if 'maj' in key_quality or 'major' in key_quality:
-        key_quality = note + 'maj' 
-    elif 'min' in key_quality or 'minor' in key_quality:
-        key_quality = note + 'min'
-    else:
-        key_quality = note
-
-    try:
-        notes_list = chords.from_shorthand(key_quality)
-        notes_str = ', '.join(notes_list)
-        text = f"The notes in a {key_quality} chord are {notes_str}."
-    except Exception as e:
-        print("EXCEPTION:", e)
-        text = f"Sorry! I can't identify a {kq_entity['body']} chord :/"    
-
-    return text 
-
-def get_songs_from_progression(response, fb_id):
-    """
-    Get songs from chord progression (e.g. 1,4,5)
-    """
-    try:
-        prog = response['entities']["Progression:Progression"][0]['body']
-    except KeyError:
-        text = "Sorry, I couldn't identify your progression :/ Please try again!"
-        return text     # Exit early
-
-    prog_list = prog.split(',')
-    prog_csv = ','.join(i.strip() for i in prog_list)
-    res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog_csv}",
-                    headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
-                    )
-    result = res.json()
-    text = ""
-    count = 1
-    print("PROG_CSV:", prog_csv)
-    print("RESULT:", result)
-
-    # Limit to 5 songs for readability
-    if len(result) > 5:
-        result = result[:5]
-
-    for song in result:
-        item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
-        text += item
-        count += 1
-
-    return text
-
 def handle_message(response, fb_id):
     """
     Customizes our first response to the message and sends it
@@ -281,24 +193,10 @@ def handle_message(response, fb_id):
     greetings = first_trait_value(response['traits'], 'wit$greetings')
     thanks = first_trait_value(response['traits'], 'wit$thanks')
     bye = first_trait_value(response['traits'], 'wit$bye')
-    user_msg = response['text']
-    allow_quick_reply = False
     
     if greetings:
         handle_start(fb_id)
         return
-    elif user_msg == "Interval":
-        text = "I could tell you the interval between 2 notes :)"
-        text_list = ["You might ask:", "C to G", "D to Ab", "Eb to F#"]
-        allow_quick_reply = True
-    elif user_msg == "Notes":
-        text = "I could tell you the notes from the name of a chord :)"
-        text_list = ["You might ask:", "C major chord", "D# major chord", "Ab minor chord"]
-        allow_quick_reply = True
-    elif user_msg == "Songs":
-        text = "I could share with you songs with certain chord progressions :)"
-        text_list = ["You might ask:", "1,4,5", "2,3,6", "3,5,2"]
-        allow_quick_reply = True
     elif thanks:
         text = "No problem!"
     elif bye:
@@ -309,34 +207,124 @@ def handle_message(response, fb_id):
             return
 
         intent = response['intents'][0]['name']
+        entity = response['entities'][0]['name']
         
         if intent == 'Greetings':
             handle_start(fb_id)
             return
         elif intent == 'getInterval':
-            text = get_interval(response, fb_id)
-        elif intent == 'getChords':
-            text = get_notes_from_chord(response, fb_id)
-        elif intent == 'getSongsFromProgression':
-            text = get_songs_from_progression(response, fb_id)
-        elif intent == 'getComposer':
+            # * Identify the 2 notes user sent. Input to library function and return identified interval as response back to user
+            notes = response['entities']["Note:Note"]
+            note1 = notes[0]['value']
+            note2 = notes[1]['value']
+            print(f"Note 1 is {note1} and Note 2 is {note2}")
             try:
-                if response['entities']['Romantic_Composer:Pyotr_Ilyich_Tchaikovsky'][0]['name'] == 'Romantic_Composer':
-                    text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
-                elif response['entities']['Baroque_Composer:Johann_Sebastian_Bach'][0]['name'] == 'Baroque_Composer':
-                    text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
-                else:
-                    text = "I don't know this composer. Yet ;)"
+                interval = intervals.determine(note1, note2)
+                text = f"The interval between {note1} and {note2} is {interval}."
+            except Exception as e:
+                print("EXCEPTION", e)
+                text = f"Sorry! I don't know the interval between {note1} and {note2} :/"
+        elif intent == 'getChords':
+            # ? AND/OR: Identify the notes user sent. Input to library function and return identified chord as response back to user
+            # ? When user requests 7th chord, check if trait "7th" is present
+            # ? When user requests inversions, check if trait "inversion" and get it's value, then use inversion function on chord
+            # * Identify the chord user sent. Input to libary function and return chord's notes as response back to user
+            try:
+                kq_entity = response['entities']["Key_Quality:Key_Quality"][0]
             except KeyError:
-                text = "Looks like something went wrong o.o"
+                text = "Sorry! I couldn't identify the chord name :/"
+                fb_message(fb_id, text)
+                return
+
+            key_quality = kq_entity['value']
+            key_quality = key_quality.lower()
+            key_quality = key_quality.capitalize()
+            note = kq_entity['entities'][0]['value']
+
+            # If user joins key with quality
+            if not note: 
+                text = "Sorry! I'm not sure what the key is :/"
+                fb_message(fb_id, text)
+                return
+            
+            if 'maj' in key_quality or 'major' in key_quality:
+                key_quality = note + 'maj' 
+            elif 'min' in key_quality or 'minor' in key_quality:
+                key_quality = note + 'min'
+            else:
+                key_quality = note
+
+            try:
+                notes_list = chords.from_shorthand(key_quality)
+                notes_str = ', '.join(notes_list)
+                text = f"The notes in a {key_quality} chord are {notes_str}."
+            except Exception as e:
+                print("EXCEPTION:", e)
+                text = f"Sorry! I can't identify a {key_quality} chord :/"    
+        elif intent == 'getSongsFromProgression':
+            # * Get songs from chord progression
+            # TODO: Extract progression from user
+            prog = '4,1'
+            res = requests.get("https://api.hooktheory.com/v1/" + f"trends/songs?cp={prog}",
+                            headers={'Authorization': 'Bearer 06e6698541901e71cece0b359c6077b3'},
+                            )
+            result = res.json()
+            text = ""
+            count = 1
+
+            for song in result:
+                item = f"{count}. {song['song']} ({song['section']}) by {song['artist']}\n"
+                text += item
+                count += 1
+<<<<<<< Updated upstream
+        elif intent == 'getComposer' and entity == 'Baroque_Composer':
+            text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+        elif intent == 'getComposer' and entity == 'Romantic_Composer':
+            text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+=======
+        elif intent == 'getComposer':
+            composer = notes = response['entities']["Note:Note"]
+            if response['entities']['Romantic_Composer:Pyotr_Ilyich_Tchaikovsky'][0]['name'] == 'Romantic_Composer':
+                
+                text = "\"{response['text']}\" was a composer from the Romantic era. Read more here: https://en.wikipedia.org/wiki/List_of_Romantic-era_composers"
+            elif response['entities']['Baroque_Composer:Johann_Sebastian_Bach'][0]['name'] == 'Baroque_Composer':
+                text = "\"{response['text']}\" was a composer from the Baroque era, marked by little variations in tempo and 4/4 timings. Read more here: https://en.wikipedia.org/wiki/List_of_Baroque_composers"
+            else:
+                text = "I don't know this composer. Yet ;)"
+
+        elif intent == 'getJokes':         
+            sequence = ["Why couldn't the string quartet find their composer? He was Haydn.",
+                        "Arnold Schoenberg walks into a bar. 'I'll have a gin please, but no tonic.'", 
+                        "Why didn't Handel go shopping? Because he was Baroque.", 
+                        "How do you fix a broken brass instrument? With a tuba glue.", 
+                        "Middle C, E flat and G walk into a bar. 'Sorry,' the barman said. 'We don't serve minors.',
+                        "TEMPO TANTRUM:  What an elementary school orchestra is having when it's not following the conductor.",
+                        "FLUTE FLIES:  Those tiny mosquitoes that bother musicians on outdoor gigs.",
+                        "ALLREGRETTO:  When you're 16 measures into the piece and realize you took too fast a tempo.",
+                        "Why did the pianist keep banging his head against the keys? He was playing by ear.",
+                        "Want to hear a joke about a staccato? Never mind, it's too short.",
+                        "How about a fermata joke? Never mind, it's too long."]
+            joke = random.choice(sequence)
+            text = joke
+>>>>>>> Stashed changes
         else:
-            text = "Sorry, I couldn't quite understand. Please rephrase your question?"
+            text = "Sorry, we couldn't quite understand. Please rephrase your question?"
 
     # Send response back to user
     fb_message(fb_id, text)
-    if allow_quick_reply:
-        quick_reply(fb_id, text_list)
 
+def handle_intents(response, fb_id):
+    """
+    Scripted replies based on user intent
+    
+    
+    composer=
+    majorKey=
+    minorKey = first_trait_value(response['traits'], 'wit$bye')
+    chords = 
+    """
+    elif intent == 'getChords' and entity == 'Key_C_major':
+        text = "This is C major, comprised of the notes C E and G."
         
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
