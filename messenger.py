@@ -311,6 +311,28 @@ def get_joke(respones, fb_id):
 
     return joke
 
+def get_random_song(response, fb_id):
+    """Return random song from top 20 tracks of 2020."""
+    artist_name = []
+    track_name = []
+    popularity = []
+
+    for i in range(0,10,20):
+        track_results = sp.search(q='year:2020', type='track', limit=20) 
+        for i, t in enumerate(track_results['tracks']['items']):
+            artist_name.append(t['artists'][0]['name'])
+            track_name.append(t['name'])
+            popularity.append(t['popularity'])     
+
+    num = random.randint(0,19)
+    text = ""
+    text += f"Artist: {artist_name[num]}\n"
+    text += f"Track: {track_name[num]}\n"
+    text += f"Popularity: {str(popularity[num])} + /100\n"
+    text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']}"
+
+    return text
+
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
@@ -385,24 +407,7 @@ def handle_message(response, fb_id):
             else:
                 text = "ERROR"
         elif intent == 'getRandomSong':
-            # List top 20 tracks of 2020
-            artist_name = []
-            track_name = []
-            popularity = []
-
-            for i in range(0,10,20):
-                track_results = sp.search(q='year:2020', type='track', limit=20) 
-                for i, t in enumerate(track_results['tracks']['items']):
-                    artist_name.append(t['artists'][0]['name'])
-                    track_name.append(t['name'])
-                    popularity.append(t['popularity'])     
-
-            num = random.randint(0,19)
-            text = ""
-            text += f"Artist: {artist_name[num]}\n"
-            text += f"Track: {track_name[num]}\n"
-            text += f"Popularity: {str(popularity[num])} + /100\n"
-            text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']}"
+            text = get_random_song(response, fb_id)
         elif intent == 'getSongsByComposer':             
             try:
                 #ERROR: TODO change
