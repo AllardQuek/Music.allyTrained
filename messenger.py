@@ -386,6 +386,8 @@ def get_songs_by_composer(response, fb_id):
     except Exception as e:
         print("EXCEPTION:", e)
         text = "Sorry, we are still working on this feature. Try again next time!"
+        
+    return text
 
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
