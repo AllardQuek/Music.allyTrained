@@ -399,9 +399,10 @@ def handle_message(response, fb_id):
 
             num = random.randint(0,19)
             text = ""
-            text += f"Artist: + {str(artist_name[num])}\n"
-            text += f"Track: + {str(track_name[num])}\n"
-            text += f"Popularity: + {str(popularity[num])} + /100\n"
+            text += f"Artist: {artist_name[num]}\n"
+            text += f"Track: {track_name[num]}\n"
+            text += f"Popularity: {str(popularity[num])} + /100\n"
+            text += f"Link: {track_results['tracks']['items'][num]['external_urls']['spotify']"
         elif intent == 'getSongsByComposer':             
             try:
                 #ERROR: TODO change
@@ -412,7 +413,9 @@ def handle_message(response, fb_id):
                 elif 'Romantic_Composer:Romantic_Composer' in response['entities']:
                     composer_name = response['entities']["Romantic_Composer:Romantic_Composer"][0]['name']
                 elif 'Modern_Composer:Modern_Composer' in response['entities']:
-                    composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']                
+                    composer_name = response['entities']["Modern_Composer:Modern_Composer"][0]['name']   
+                elif 'Songs_by_Composer:Songs_by_Composer' in response['entities']:
+                    composer_name = response['entities']["Songs_by_Composer:Songs_by_Composer"][0]['value'] 
                 else:
                     print("ERROR") 
                     text = "Sorry, we are unable to tell what composer that is, we will improve it soon!"
