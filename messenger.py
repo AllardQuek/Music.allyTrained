@@ -312,11 +312,9 @@ def handle_message(response, fb_id):
                         "How about a fermata joke? Never mind, it's too long."]
             joke = random.choice(sequence)
             text = joke
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 
         elif intent == 'getRandomSong':
+            #Chooses a random song from the 10 most popular songs
             artist_name = []
             track_name = []
             popularity = []
@@ -344,9 +342,14 @@ def handle_message(response, fb_id):
                 print("******************************")
                 print("Popularity: " + str(popularity[x]) + "/100")
                 print('END')
+            
+            elif intent == 'getSongsbyComposer':
+                #Lists top 10 songs from user input
+                results = sp.search(str(input()), limit=20)
+                for idx, track in enumerate(results['tracks']['items']):
+                    print(idx, track['name'])
 
        
->>>>>>> Stashed changes
         else:
             text = "Sorry, we couldn't quite understand. Please rephrase your question?"
 
