@@ -19,9 +19,9 @@ Music.ally Trained is a bot which provides a quick and user-friendly way to get 
 1. Return an interval given 2 notes
 2. Return the notes in a chord given the chord's name
 3. Return songs which include a specified chord progression
-4. Return a random song from Spotify
-5. Return a musical joke
-6. Return a list of top hits by a given artist.
+4. Return a musical joke
+5. Return information about a composer
+6. Return information about an instrument
 7. Jukebox - helps you pick a random song for your next karaoke session!
 
 ## How we built it 🛠
