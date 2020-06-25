@@ -4,7 +4,7 @@ Watch this quick video demo to see what our bot can do:
 
 [![Music.ally Trained Bot](http://img.youtube.com/vi/eSmJ35rW3Uc/0.jpg)](http://www.youtube.com/watch?v=eSmJ35rW3Uc "Music.ally Trained Bot")
 
-View our hackathon submission [here](https://devpost.com/software/music-ally-trained)
+View our hackathon submission [here](https://devpost.com/software/music-ally-trained).
 
 
 ## Inspiration 💡
@@ -36,5 +36,5 @@ Our Facebook page is new and has neither any useful posts nor users, but we thin
 - Improve our bot's intelligence through more rigorous training such that it will better handle misspellings and provide users a better experience overall.
 
 ## Contributing 🤝
-We would love to hear your thoughts on this project! Feel free to reach out to us on Github or drop a comment at our [Devpost submission] (https://devpost.com/software/music-ally-trained). If you would like to try out our Messenger bot, please submit a request to our [Facebook page](https://www.facebook.com/Musically-Trained-110675580692510) first as the bot is not currently available to the public.
+We would love to hear your thoughts on this project! Feel free to reach out to us on Github or drop a comment at our [Devpost submission](https://devpost.com/software/music-ally-trained). If you would like to try out our Messenger bot, please submit a request to our [Facebook page](https://www.facebook.com/Musically-Trained-110675580692510) first as the bot is not currently available to the public.
 
