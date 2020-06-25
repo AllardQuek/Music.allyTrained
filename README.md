@@ -6,7 +6,7 @@ Many of these students find topics such as intervals, chords and progressions a 
 and so we thought: Why not stop trying to _fight_ these distractions and try to _integrate_ with them instead? Wouldn't it be great to have a musical companion bot which music students (and anyone who's interested) could ask their questions and even get a dose of inspiration to love music? 
 Thus, Music.ally Trained was born 😊
 
-Video Demo: https://youtu.be/eSmJ35rW3Uc
+[![Music.ally Trained Bot](http://img.youtube.com/vi/eSmJ35rW3Uc/0.jpg)](http://www.youtube.com/watch?v=eSmJ35rW3Uc "Music.ally Trained Bot")
 
 Hacakthon Submission: https://devpost.com/software/music-ally-trained
 
