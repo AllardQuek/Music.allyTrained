@@ -1,3 +1,8 @@
+"""
+Experiment with requests and responses from Wit App.
+
+"""
+
 #contents = url.get("https://api.wit.ai/message?v=20200622&q=what is c major")
 
 # https://stackoverflow.com/questions/45868120/python-post-request-with-bearer-token?rq=1

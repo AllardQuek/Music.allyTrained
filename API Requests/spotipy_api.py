@@ -1,5 +1,6 @@
 """
-Test your API requests and responses here.
+Test your Spotify API requests and responses here.
+
 """
 
 import spotipy
