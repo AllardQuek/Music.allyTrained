@@ -1,16 +1,20 @@
 # Music.allyTrained
 
+Watch this quick video demo to see what our bot can do:
+
+[![Music.ally Trained Bot](http://img.youtube.com/vi/eSmJ35rW3Uc/0.jpg)](http://www.youtube.com/watch?v=eSmJ35rW3Uc "Music.ally Trained Bot")
+
+Hacakthon Submission: https://devpost.com/software/music-ally-trained
+
+
 ## Inspiration
 A problem we've seen many beginner music students have constantly is finding the motivation to dive into the nitty-gritty details of music. 
 Many of these students find topics such as intervals, chords and progressions a bore compared to the myriad of distractions online, 
 and so we thought: Why not stop trying to _fight_ these distractions and try to _integrate_ with them instead? Wouldn't it be great to have a musical companion bot which music students (and anyone who's interested) could ask their questions and even get a dose of inspiration to love music? 
 Thus, Music.ally Trained was born 😊
 
-[![Music.ally Trained Bot](http://img.youtube.com/vi/eSmJ35rW3Uc/0.jpg)](http://www.youtube.com/watch?v=eSmJ35rW3Uc "Music.ally Trained Bot")
 
-Hacakthon Submission: https://devpost.com/software/music-ally-trained
-
-## What it does
+## Features
 Music.ally Trained is a bot which provides a quick and user-friendly way to get started with the basics of music theory and to discover new music! Here's what it can do currently:
 1. Return an interval given 2 notes
 2. Return the notes in a chord given the chord's name
