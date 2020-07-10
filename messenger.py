@@ -370,13 +370,13 @@ def get_instrument_section(response, fb_id):
 
 def get_songs_by_composer(response, fb_id):
     try:
-        print("STARTING>>>")
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
             results = sp.search(composer_name, limit=5)
+            
+            text = ''
             for idx, track in enumerate(results['tracks']['items']):
-                text = track['name']
-                return text
+                text += f"{track['name']}\n"
         else:
             text = 'Try another composer!'
     except Exception as e:
