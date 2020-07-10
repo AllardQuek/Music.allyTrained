@@ -368,6 +368,19 @@ def get_instrument_section(response, fb_id):
 
     return text
 
+def get_songs_by_composer(response, fb_id)
+    try:
+        if 'composers' in response['traits']:
+            composer_name = response['traits']["composers"][0]['value']
+            results = sp.search(str(input()), limit=20)
+            for idx, track in enumerate(results['tracks']['items']):
+                text = idx, track['name']
+    
+        else
+            text = 'Try another composer!'
+    print(text)
+    return text
+
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
     greetings = first_trait_value(response['traits'], 'wit$greetings')
@@ -422,7 +435,7 @@ def handle_message(response, fb_id):
         elif intent == 'getRandomSong':
             text = get_random_song(response, fb_id)
         elif intent == 'getSongsByComposer':             
-            text = 'This functionality is still a work in progress! Check back again soon ;)'
+            text = get_songs_by_composer(response, fb_id)
         else:
             # If intent detected but not scripted for yet
             text = "Sorry, I couldn't quite understand. Please rephrase your question?"   

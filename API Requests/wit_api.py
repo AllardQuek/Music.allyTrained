@@ -19,9 +19,10 @@ text = input()
 
 response = requests.get(f"https://api.wit.ai/message?v=20200622&q={text}", headers={'Authorization': 'Bearer 4NQZLEUIKILQHV6PS7YPA3F5GXQ7GYLC'})
 response = response.json()
-print(response)
+print(response['traits']["composers"][0]['value'])
 
 print("Chatbot Restarted. Ask another question:")
 #os.execl("C:\Users\verly\Desktop\trialhttpget.py",  [""])
 #os.execl(sys.executable, sys.executable, * sys.argv)
 subprocess.call(sys.argv[0], shell=True)
+
