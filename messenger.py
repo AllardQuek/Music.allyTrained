@@ -368,7 +368,7 @@ def get_instrument_section(response, fb_id):
 
     return text
 
-def get_songs_by_composer(response, fb_id)
+def get_songs_by_composer(response, fb_id):
     try:
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
@@ -376,7 +376,7 @@ def get_songs_by_composer(response, fb_id)
             for idx, track in enumerate(results['tracks']['items']):
                 text = idx, track['name']
     
-        else
+        else:
             text = 'Try another composer!'
     print(text)
     return text
