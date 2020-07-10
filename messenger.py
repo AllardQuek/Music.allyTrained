@@ -329,7 +329,7 @@ def get_joke(respones, fb_id):
                 "Why was the musician arrested? Because she got in treble!",
                 "What did the robbers take from the music store? The lute [loot]!",
                 "What makes music on your hair? A headband.",
-                "Why did Mozart kill his chickens? Because they always ran around going “Bach! Bach! Bach!” ",
+                "Why did Mozart kill his chickens? Because they always ran around going 'Bach! Bach! Bach!' ",
                 "What kind of musical instrument do rats play? Mouse organs.",
                 "Why did the tortilla chip start dancing? Because they put on the salsa.",
                 "Why did the fish make such a good musician? He knew his scales.",
