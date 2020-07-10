@@ -376,7 +376,7 @@ def get_songs_by_composer(response, fb_id):
             
             text = ''
             for idx, track in enumerate(results['tracks']['items']):
-                text += f"{track['name']}\n"
+                text += f"{idx + 1}: {track['name']}\n"
         else:
             text = 'Try another composer!'
     except Exception as e:
