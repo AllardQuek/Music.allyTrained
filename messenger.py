@@ -314,7 +314,7 @@ def get_joke(respones, fb_id):
                 # "What do you get when you drop a piano down a mine shaft? A flat minor [miner].",
                 # "How can you tell if a singer's at your door? They can't find the key and don't know when to come in.",
                 # "Why did the pirate buy a Pavarotti album? Because he loved the high Cs.",
-                "Two back desk orchestral players go fishing and one falls out of the boat. He screams: 'Help, I don't know how to swim!' /n His partner replies: 'Just fake it!'",
+                "Two back desk orchestral players go fishing and one falls out of the boat. He screams: 'Help, I don't know how to swim!' \n His partner replies: 'Just fake it!'",
                 # "How do you make a bandstand? Take away their chairs.",
                 # "How many concert masters does it take to change a light bulb? Just one, but it takes four movements.",
                 # "What musical keys do cows sing in? Beef flat.",
