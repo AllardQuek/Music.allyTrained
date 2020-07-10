@@ -372,15 +372,15 @@ def get_songs_by_composer(response, fb_id):
     try:
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
-            results = sp.search(str(input()), limit=20)
+            results = sp.search(composer_name), limit=20)
             for idx, track in enumerate(results['tracks']['items']):
                 text = idx, track['name']
-    
         else:
             text = 'Try another composer!'
     except Exception as e:
+        text = "Something went wrong, try again later!"
         print("ERROR:", e)
-        
+
     print(text)
     return text
 
