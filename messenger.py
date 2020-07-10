@@ -378,7 +378,10 @@ def get_songs_by_composer(response, fb_id):
     
         else:
             text = 'Try another composer!'
-    # print(text)
+    except Exception as e:
+        print("ERROR:", e)
+        
+    print(text)
     return text
 
 def handle_message(response, fb_id):
