@@ -15,7 +15,8 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_
 results = sp.search(str(input()), limit=20)
 for idx, track in enumerate(results['tracks']['items']):
     text = idx, track['name']
-    print(text)
+
+print(text)
 
 # results = sp.search(q='bach', limit=10)
 # for idx, track in enumerate(results['tracks']['items']):
@@ -45,16 +46,16 @@ for idx, track in enumerate(results['tracks']['items']):
 #     print("EXCEPTION:", e)
 #     text = "Sorry, we are still working on this feature. Try again next time!"
 
-def get_songs_by_composer(response, fb_id)
-    try:
-        if 'composers' in response['traits']:
-            composer_name = response['traits']["composers"][0]['value']
-            results = sp.search(str(input()), limit=20)
-            for idx, track in enumerate(results['tracks']['items']):
-                text = idx, track['name']
+# def get_songs_by_composer(response, fb_id):
+#     try:
+#         if 'composers' in response['traits']:
+#             composer_name = response['traits']["composers"][0]['value']
+#             results = sp.search(str(input()), limit=20)
+#             for idx, track in enumerate(results['tracks']['items']):
+#                 text = idx, track['name']
     
-        else
-            text = 'Try another composer!'
-    print(text)
-    return text   
+#         else:
+#             text = 'Try another composer!'
+#     print(text)
+#     return text   
 
