@@ -373,17 +373,18 @@ def get_songs_by_composer(response, fb_id):
         print("STARTING>>>")
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
-            results = sp.search(composer_name, limit=20)
+            results = sp.search(composer_name, limit=5)
             for idx, track in enumerate(results['tracks']['items']):
                 text = track['name']
-            return text
+                return text
         else:
             text = 'Try another composer!'
     except Exception as e:
         text = "Something went wrong, try again later!"
         print("ERROR:", e)
 
-    
+    print(text)
+    return text
 
 def handle_message(response, fb_id):
     """Handle all messages from user and send response back to Messenger."""
