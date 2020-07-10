@@ -369,6 +369,7 @@ def get_instrument_section(response, fb_id):
     return text
 
 def get_songs_by_composer(response, fb_id):
+    """Return 5 songs by a given composer."""
     try:
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
