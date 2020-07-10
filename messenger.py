@@ -373,9 +373,9 @@ def get_songs_by_composer(response, fb_id):
         print("STARTING>>>")
         if 'composers' in response['traits']:
             composer_name = response['traits']["composers"][0]['value']
-            results = sp.search(composer_name), limit=20)
+            results = sp.search(composer_name, limit=20)
             for idx, track in enumerate(results['tracks']['items']):
-                text = idx, track['name']
+                text = track['name']
             return text
         else:
             text = 'Try another composer!'
